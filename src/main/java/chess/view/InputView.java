@@ -14,7 +14,8 @@ public class InputView {
     private static final Map<String, CommandType> COMMANDS = Map.of(
             "start", CommandType.START,
             "end", CommandType.END,
-            "move", CommandType.MOVE
+            "move", CommandType.MOVE,
+            "status", CommandType.STATUS
     );
     private static final String COMMAND_DELIMITER = " ";
     private static final int COMMAND_TYPE_INDEX = 0;

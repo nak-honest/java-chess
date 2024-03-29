@@ -29,12 +29,16 @@ public class Command {
         return isNotStart() && isNotEnd();
     }
 
+    public boolean isNotEnd() {
+        return type != CommandType.END;
+    }
+
     public boolean isMove() {
         return type == CommandType.MOVE;
     }
 
-    public boolean isNotEnd() {
-        return type != CommandType.END;
+    public boolean isStatus() {
+        return type == CommandType.STATUS;
     }
 
     public List<String> getArguments() {

@@ -76,6 +76,15 @@ public class OutputView {
         }
     }
 
+    public void printStatus(Map<Color, Double> status) {
+        status.forEach(this::printScore);
+        System.out.println();
+    }
+
+    private void printScore(Color color, Double score) {
+        System.out.println(String.format("%s팀의 점수는 %.1f점입니다.", COLOR_VIEW.get(color), score));
+    }
+
     public void printGameResult(Color winnerColor) {
         System.out.println(String.format("%s팀이 승리하였습니다.", COLOR_VIEW.get(winnerColor)));
     }

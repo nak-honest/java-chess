@@ -83,10 +83,21 @@ public class ChessController {
     }
 
     private void processTurn(Command command, ChessGame chessGame) {
+        tryMove(command, chessGame);
+        tryStatus(command, chessGame);
+    }
+
+    private void tryMove(Command command, ChessGame chessGame) {
         if (command.isMove()) {
             TerminalPosition terminalPosition = TerminalPositionView.of(command.getArguments());
             chessGame.movePiece(terminalPosition);
             outputView.printChessBoard(chessGame.getPieces());
+        }
+    }
+
+    private void tryStatus(Command command, ChessGame chessGame) {
+        if (command.isStatus()) {
+            outputView.printStatus(chessGame.calculateScore());
         }
     }
 }
