@@ -25,7 +25,7 @@ public class ChessGameTest {
             ChessGame chessGame = ChessGame.createOnStart();
 
             // when & then
-            assertThat(chessGame.calculateScore()).isEqualTo(Map.of(
+            assertThat(chessGame.status()).isEqualTo(Map.of(
                     Color.BLACK, 38.0,
                     Color.WHITE, 38.0
             ));
@@ -48,7 +48,7 @@ public class ChessGameTest {
             ChessGame chessGame = provideChessGameAsPawnDead();
 
             // when & then
-            assertThat(chessGame.calculateScore()).isEqualTo(Map.of(
+            assertThat(chessGame.status()).isEqualTo(Map.of(
                     Color.BLACK, 36.0,
                     Color.WHITE, 37.0
             ));

@@ -97,7 +97,7 @@ public class ChessController {
 
     private void tryStatus(Command command, ChessGame chessGame) {
         if (command.isStatus()) {
-            outputView.printStatus(chessGame.calculateScore());
+            outputView.printStatus(chessGame.status());
         }
     }
 }
