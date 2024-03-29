@@ -66,6 +66,7 @@ public class ChessController {
     }
 
     private Command receiveProcessCommand(ChessGame chessGame) {
+        // TODO: 상태 관리가 어려우니 객체로 바라볼지 고려해 보기
         if (chessGame.isGameOver()) {
             return Command.createNoArgCommand(CommandType.END);
         }

@@ -2,7 +2,6 @@ package chess.domain.board;
 
 import chess.domain.piece.Color;
 import chess.domain.piece.Empty;
-import chess.domain.piece.King;
 import chess.domain.piece.Piece;
 import chess.domain.position.Position;
 import chess.domain.position.TerminalPosition;
@@ -12,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// TODO: 하위 문제들을 객체로 분리하는 것 고려해보기
 public class ChessBoard {
     private final Map<Position, Piece> pieces;
 
@@ -106,9 +106,10 @@ public class ChessBoard {
         pieces.put(position, piece);
     }
 
-    public boolean isKingDead(Color color) {
-        return pieces.values().stream()
-                .noneMatch(piece -> piece.equals(King.from(color)));
+    public int countPiece(Piece counted) {
+        return (int) pieces.values().stream()
+                .filter(piece -> piece.equals(counted))
+                .count();
     }
 
     @Override

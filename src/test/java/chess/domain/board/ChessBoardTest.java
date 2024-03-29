@@ -2,7 +2,7 @@ package chess.domain.board;
 
 import chess.domain.piece.Color;
 import chess.domain.piece.Empty;
-import chess.domain.piece.King;
+import chess.domain.piece.Pawn;
 import chess.domain.piece.Piece;
 import chess.domain.piece.Queen;
 import chess.domain.piece.Rook;
@@ -19,6 +19,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class ChessBoardTest {
 
@@ -103,46 +104,26 @@ public class ChessBoardTest {
         }
     }
 
-    @DisplayName("king이 잡혔는지에 대한 테스트")
-    @Nested
-    class IsKingDeadTest {
-        @DisplayName("black king이 잡혔는지 구한다.")
-        @Test
-        void blackKingDeadTest() {
-            // given
-            Map<Position, Piece> pieces = provideEmptyBoard();
-            pieces.put(new Position(File.A, Rank.FIRST), King.from(Color.BLACK));
-            pieces.put(new Position(File.B, Rank.EIGHTH), King.from(Color.WHITE));
-            pieces.put(new Position(File.A, Rank.THIRD), Rook.from(Color.WHITE));
-            ChessBoard chessBoard = new ChessBoard(pieces);
+    @DisplayName("각 체스 말이 몇개 존재하는지 센다.")
+    @Test
+    void countPieceTest() {
+        // given
+        Map<Position, Piece> pieces = provideEmptyBoard();
+        pieces.put(new Position(File.A, Rank.FIRST), Rook.from(Color.WHITE));
+        pieces.put(new Position(File.B, Rank.EIGHTH), Rook.from(Color.BLACK));
+        pieces.put(new Position(File.A, Rank.THIRD), Rook.from(Color.BLACK));
+        pieces.put(new Position(File.D, Rank.FOURTH), Pawn.from(Color.WHITE));
+        pieces.put(new Position(File.E, Rank.FOURTH), Pawn.from(Color.WHITE));
 
-            // when
-            chessBoard.move(new TerminalPosition(
-                    new Position(File.A, Rank.THIRD),
-                    new Position(File.A, Rank.FIRST)), Color.WHITE);
+        ChessBoard chessBoard = new ChessBoard(pieces);
 
-            // then
-            assertThat(chessBoard.isKingDead(Color.BLACK)).isTrue();
-        }
-
-        @DisplayName("white king이 잡혔는지 구한다.")
-        @Test
-        void whiteKingDeadTest() {
-            // given
-            Map<Position, Piece> pieces = provideEmptyBoard();
-            pieces.put(new Position(File.A, Rank.FIRST), King.from(Color.WHITE));
-            pieces.put(new Position(File.B, Rank.EIGHTH), King.from(Color.BLACK));
-            pieces.put(new Position(File.A, Rank.THIRD), Rook.from(Color.BLACK));
-            ChessBoard chessBoard = new ChessBoard(pieces);
-
-            // when
-            chessBoard.move(new TerminalPosition(
-                    new Position(File.A, Rank.THIRD),
-                    new Position(File.A, Rank.FIRST)), Color.BLACK);
-
-            // then
-            assertThat(chessBoard.isKingDead(Color.WHITE)).isTrue();
-        }
+        // when & then
+        assertAll(
+                () -> assertThat(chessBoard.countPiece(Rook.from(Color.WHITE))).isEqualTo(1),
+                () -> assertThat(chessBoard.countPiece(Rook.from(Color.BLACK))).isEqualTo(2),
+                () -> assertThat(chessBoard.countPiece(Pawn.from(Color.WHITE))).isEqualTo(2),
+                () -> assertThat(chessBoard.countPiece(Queen.from(Color.WHITE))).isEqualTo(0)
+        );
     }
 
     static Map<Position, Piece> provideEmptyBoard() {
