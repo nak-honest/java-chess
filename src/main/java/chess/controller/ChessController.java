@@ -1,6 +1,7 @@
 package chess.controller;
 
 import chess.command.Command;
+import chess.command.CommandType;
 import chess.domain.game.ChessGame;
 import chess.domain.position.TerminalPosition;
 import chess.util.ExceptionRetryHandler;
@@ -49,15 +50,19 @@ public class ChessController {
     }
 
     private void processGame(ChessGame chessGame) {
-        Command command = receiveProcessCommand();
+        Command command = receiveProcessCommand(chessGame);
 
         while (command.isNotEnd()) {
             processTurn(command, chessGame);
-            command = receiveProcessCommand();
+            command = receiveProcessCommand(chessGame);
         }
     }
 
-    private Command receiveProcessCommand() {
+    private Command receiveProcessCommand(ChessGame chessGame) {
+        if (chessGame.isKingDead()) {
+            return Command.createNoArgCommand(CommandType.END);
+        }
+
         Command command = inputView.readCommand();
         validateNotStart(command);
         return command;

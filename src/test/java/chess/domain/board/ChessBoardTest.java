@@ -2,6 +2,7 @@ package chess.domain.board;
 
 import chess.domain.piece.Color;
 import chess.domain.piece.Empty;
+import chess.domain.piece.King;
 import chess.domain.piece.Piece;
 import chess.domain.piece.Queen;
 import chess.domain.piece.Rook;
@@ -9,7 +10,6 @@ import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
 import chess.domain.position.TerminalPosition;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,21 +22,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ChessBoardTest {
 
-    private static final Map<Position, Piece> pieces = new HashMap<>();
-
-    @BeforeEach
-    void setUp() {
-        for (Rank rank : Rank.values()) {
-            updateFileByRank(rank);
-        }
-    }
-
-    private void updateFileByRank(Rank rank) {
-        for (File file : File.values()) {
-            pieces.put(new Position(file, rank), Empty.getInstance());
-        }
-    }
-
     @DisplayName("체스말 이동 예외 테스트")
     @Nested
     class PieceMoveExceptionTest {
@@ -44,6 +29,7 @@ public class ChessBoardTest {
         @Test
         void startEmptyExceptionTest() {
             // given
+            Map<Position, Piece> pieces = provideEmptyBoard();
             ChessBoard chessBoard = new ChessBoard(pieces);
             TerminalPosition terminalPosition =
                     new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.B, Rank.SECOND));
@@ -59,6 +45,7 @@ public class ChessBoardTest {
         @Test
         void canNotAttack() {
             // given
+            Map<Position, Piece> pieces = provideEmptyBoard();
             pieces.put(new Position(File.A, Rank.FIRST), Rook.from(Color.WHITE));
             pieces.put(new Position(File.A, Rank.SECOND), Rook.from(Color.WHITE));
             ChessBoard chessBoard = new ChessBoard(pieces);
@@ -80,6 +67,7 @@ public class ChessBoardTest {
         @Test
         void movePieceTest() {
             // given
+            Map<Position, Piece> pieces = provideEmptyBoard();
             pieces.put(new Position(File.A, Rank.FIRST), Rook.from(Color.WHITE));
             ChessBoard chessBoard = new ChessBoard(pieces);
             Map<Position, Piece> expected = provideEmptyBoard();
@@ -98,6 +86,7 @@ public class ChessBoardTest {
         @Test
         void moveAttackTest() {
             // given
+            Map<Position, Piece> pieces = provideEmptyBoard();
             pieces.put(new Position(File.A, Rank.FIRST), Rook.from(Color.WHITE));
             pieces.put(new Position(File.B, Rank.FIRST), Queen.from(Color.BLACK));
             ChessBoard chessBoard = new ChessBoard(pieces);
@@ -112,18 +101,43 @@ public class ChessBoardTest {
             // then
             assertThat(chessBoard.getPieces()).isEqualTo(expected);
         }
+    }
 
+    @DisplayName("king이 잡혔는지 구한다.")
+    @Test
+    void kingDeadTest() {
+        // given
+        Map<Position, Piece> pieces = provideEmptyBoard();
+        pieces.put(new Position(File.A, Rank.FIRST), King.from(Color.BLACK));
+        pieces.put(new Position(File.B, Rank.EIGHTH), King.from(Color.WHITE));
+        pieces.put(new Position(File.A, Rank.THIRD), Rook.from(Color.WHITE));
+        ChessBoard chessBoard = new ChessBoard(pieces);
 
-        static Map<Position, Piece> provideEmptyBoard() {
-            Map<Position, Piece> pieces = new HashMap<>();
+        // when
+        chessBoard.move(new TerminalPosition(
+                new Position(File.A, Rank.THIRD),
+                new Position(File.A, Rank.FIRST)), Color.WHITE);
 
-            for (Rank rank : Rank.values()) {
-                for (File file : File.values()) {
-                    pieces.put(new Position(file, rank), Empty.getInstance());
-                }
-            }
+        // then
+        assertThat(chessBoard.isKingDead()).isTrue();
+    }
 
-            return pieces;
+    static Map<Position, Piece> provideEmptyBoard() {
+        Map<Position, Piece> pieces = new HashMap<>();
+
+        for (Rank rank : Rank.values()) {
+            pieces.putAll(provideFileByRank(rank));
         }
+
+        return pieces;
+    }
+
+    static Map<Position, Piece> provideFileByRank(Rank rank) {
+        Map<Position, Piece> pieces = new HashMap<>();
+        for (File file : File.values()) {
+            pieces.put(new Position(file, rank), Empty.getInstance());
+        }
+
+        return pieces;
     }
 }

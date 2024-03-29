@@ -9,6 +9,7 @@ import java.util.Objects;
 
 public abstract class Piece {
     private final Color color;
+    // TODO: protected 개선
     protected final Movements movements;
 
     public Piece(Color color, Movements movements) {

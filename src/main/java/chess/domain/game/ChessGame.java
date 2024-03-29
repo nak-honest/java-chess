@@ -26,6 +26,10 @@ public class ChessGame {
         turn.process();
     }
 
+    public boolean isKingDead() {
+        return board.isKingDead();
+    }
+
     public Map<Position, Piece> getPieces() {
         return board.getPieces();
     }

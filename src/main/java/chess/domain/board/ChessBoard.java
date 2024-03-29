@@ -2,6 +2,7 @@ package chess.domain.board;
 
 import chess.domain.piece.Color;
 import chess.domain.piece.Empty;
+import chess.domain.piece.King;
 import chess.domain.piece.Piece;
 import chess.domain.position.Position;
 import chess.domain.position.TerminalPosition;
@@ -103,6 +104,16 @@ public class ChessBoard {
 
     private void putPiece(Position position, Piece piece) {
         pieces.put(position, piece);
+    }
+
+    public boolean isKingDead() {
+        return countKing() != 2;
+    }
+
+    private int countKing() {
+        return (int) pieces.values().stream()
+                .filter(piece -> piece.equals(King.from(Color.BLACK)) || piece.equals(King.from(Color.WHITE)))
+                .count();
     }
 
     @Override
