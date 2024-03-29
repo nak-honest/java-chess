@@ -3,9 +3,12 @@ package chess.domain.board;
 import chess.domain.piece.Color;
 import chess.domain.piece.Empty;
 import chess.domain.piece.Piece;
+import chess.domain.position.File;
 import chess.domain.position.Position;
+import chess.domain.position.Rank;
 import chess.domain.position.TerminalPosition;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -109,6 +112,13 @@ public class ChessBoard {
     public int countPiece(Piece counted) {
         return (int) pieces.values().stream()
                 .filter(piece -> piece.equals(counted))
+                .count();
+    }
+
+    public int countPieceAtFile(Piece counted, File file) {
+        return (int) Arrays.stream(Rank.values())
+                .map(rank -> new Position(file, rank))
+                .filter(position -> counted.equals(pieces.get(position)))
                 .count();
     }
 

@@ -20,7 +20,7 @@ public class ChessGameTest {
     class CalculateScoreTest {
         @DisplayName("초기 체스판에서 각 진영의 점수를 구한다.")
         @Test
-        void calculateScoreTest() {
+        void calculateInitScoreTest() {
             // given
             ChessGame chessGame = ChessGame.createOnStart();
 
@@ -29,6 +29,110 @@ public class ChessGameTest {
                     Color.BLACK, 38.0,
                     Color.WHITE, 38.0
             ));
+        }
+
+        /*
+        RNBQKBNR
+        PPPP..PP
+        .....p..
+        ........
+        ........
+        ........
+        ppp.pppp
+        rnbqkbnr
+         */
+        @DisplayName("같은 File에 Pawn이 2개 이상 존재한다면 0.5점으로 계산한다.")
+        @Test
+        void calculatePawnScoreTest() {
+            // given
+            ChessGame chessGame = provideChessGameAsPawnDead();
+
+            // when & then
+            assertThat(chessGame.calculateScore()).isEqualTo(Map.of(
+                    Color.BLACK, 36.0,
+                    Color.WHITE, 37.0
+            ));
+        }
+
+        static ChessGame provideChessGameAsPawnDead() {
+            /*
+            RNBQKBNR
+            PPPPPPPP
+            ........
+            ........
+            ........
+            ........
+            pppppppp
+            rnbqkbnr
+             */
+            ChessGame chessGame = ChessGame.createOnStart();
+
+            /*
+            RNBQKBNR
+            PPPPPPPP
+            ........
+            ........
+            ...p....
+            ........
+            ppp.pppp
+            rnbqkbnr
+             */
+            chessGame.movePiece(
+                    new TerminalPosition(new Position(File.D, Rank.SECOND), new Position(File.D, Rank.FOURTH)));
+
+            /*
+            RNBQKBNR
+            PPPP.PPP
+            ........
+            ....P...
+            ...p....
+            ........
+            ppp.pppp
+            rnbqkbnr
+             */
+            chessGame.movePiece(
+                    new TerminalPosition(new Position(File.E, Rank.SEVENTH), new Position(File.E, Rank.FIFTH)));
+
+            /*
+            RNBQKBNR
+            PPPP.PPP
+            ........
+            ....p...
+            ........
+            ........
+            ppp.pppp
+            rnbqkbnr
+             */
+            chessGame.movePiece(
+                    new TerminalPosition(new Position(File.D, Rank.FOURTH), new Position(File.E, Rank.FIFTH)));
+
+            /*
+            RNBQKBNR
+            PPPP..PP
+            .....P..
+            ....p...
+            ........
+            ........
+            ppp.pppp
+            rnbqkbnr
+             */
+            chessGame.movePiece(
+                    new TerminalPosition(new Position(File.F, Rank.SEVENTH), new Position(File.F, Rank.SIXTH)));
+
+            /*
+            RNBQKBNR
+            PPPP..PP
+            .....p..
+            ........
+            ........
+            ........
+            ppp.pppp
+            rnbqkbnr
+             */
+            chessGame.movePiece(
+                    new TerminalPosition(new Position(File.E, Rank.FIFTH), new Position(File.F, Rank.SIXTH)));
+
+            return chessGame;
         }
     }
 
@@ -77,93 +181,93 @@ public class ChessGameTest {
 
 
         static ChessGame provideChessGameAsWhiteKingDead() {
-        /*
-        RNBQKBNR
-        PPPPPPPP
-        ........
-        ........
-        ........
-        ........
-        pppppppp
-        rnbqkbnr
-         */
+            /*
+            RNBQKBNR
+            PPPPPPPP
+            ........
+            ........
+            ........
+            ........
+            pppppppp
+            rnbqkbnr
+             */
             ChessGame chessGame = ChessGame.createOnStart();
 
-        /*
-        RNBQKBNR
-        PPPPPPPP
-        ........
-        ........
-        ........
-        .....p..
-        ppppp.pp
-        rnbqkbnr
-         */
+            /*
+            RNBQKBNR
+            PPPPPPPP
+            ........
+            ........
+            ........
+            .....p..
+            ppppp.pp
+            rnbqkbnr
+             */
             chessGame.movePiece(
                     new TerminalPosition(new Position(File.F, Rank.SECOND), new Position(File.F, Rank.THIRD)));
 
-        /*
-        RNBQKBNR
-        PPPP.PPP
-        ........
-        ....P...
-        ........
-        .....p..
-        ppppp.pp
-        rnbqkbnr
-         */
+            /*
+            RNBQKBNR
+            PPPP.PPP
+            ........
+            ....P...
+            ........
+            .....p..
+            ppppp.pp
+            rnbqkbnr
+             */
             chessGame.movePiece(
                     new TerminalPosition(new Position(File.E, Rank.SEVENTH), new Position(File.E, Rank.FIFTH)));
 
-        /*
-        RNBQKBNR
-        PPPP.PPP
-        ........
-        ....P...
-        ......p.
-        .....p..
-        ppppp..p
-        rnbqkbnr
-         */
+            /*
+            RNBQKBNR
+            PPPP.PPP
+            ........
+            ....P...
+            ......p.
+            .....p..
+            ppppp..p
+            rnbqkbnr
+             */
             chessGame.movePiece(
                     new TerminalPosition(new Position(File.G, Rank.SECOND), new Position(File.G, Rank.FOURTH)));
 
-        /*
-        RNB.KBNR
-        PPPP.PPP
-        ........
-        ....P...
-        ......pQ
-        .....p..
-        ppppp..p
-        rnbqkbnr
-         */
+            /*
+            RNB.KBNR
+            PPPP.PPP
+            ........
+            ....P...
+            ......pQ
+            .....p..
+            ppppp..p
+            rnbqkbnr
+             */
             chessGame.movePiece(
                     new TerminalPosition(new Position(File.D, Rank.EIGHTH), new Position(File.H, Rank.FOURTH)));
 
-        /*
-        RNB.KBNR
-        PPPP.PPP
-        ........
-        ....P...
-        ......pQ
-        .....p.p
-        ppppp...
-        rnbqkbnr
-         */
+            /*
+            RNB.KBNR
+            PPPP.PPP
+            ........
+            ....P...
+            ......pQ
+            .....p.p
+            ppppp...
+            rnbqkbnr
+             */
             chessGame.movePiece(
                     new TerminalPosition(new Position(File.H, Rank.SECOND), new Position(File.H, Rank.THIRD)));
 
-        /*
-        RNB.KBNR
-        PPPP.PPP
-        ........
-        ....P...
-        ......p.
-        .....p.p
-        ppppp...
-        rnbqQbnr
-         */
+            /*
+            RNB.KBNR
+            PPPP.PPP
+            ........
+            ....P...
+            ......p.
+            .....p.p
+            ppppp...
+            rnbqQbnr
+             */
             chessGame.movePiece(
                     new TerminalPosition(new Position(File.H, Rank.FOURTH), new Position(File.E, Rank.FIRST)));
 
@@ -171,80 +275,80 @@ public class ChessGameTest {
         }
 
         static ChessGame provideChessGameAsBlackKingDead() {
-        /*
-        RNBQKBNR
-        PPPPPPPP
-        ........
-        ........
-        ........
-        ........
-        pppppppp
-        rnbqkbnr
-         */
+            /*
+            RNBQKBNR
+            PPPPPPPP
+            ........
+            ........
+            ........
+            ........
+            pppppppp
+            rnbqkbnr
+             */
             ChessGame chessGame = ChessGame.createOnStart();
 
-        /*
-        RNBQKBNR
-        PPPPPPPP
-        ........
-        ........
-        ........
-        ....p...
-        pppp.ppp
-        rnbqkbnr
-         */
+            /*
+            RNBQKBNR
+            PPPPPPPP
+            ........
+            ........
+            ........
+            ....p...
+            pppp.ppp
+            rnbqkbnr
+             */
             chessGame.movePiece(
                     new TerminalPosition(new Position(File.E, Rank.SECOND), new Position(File.E, Rank.THIRD)));
 
-        /*
-        RNBQKBNR
-        PPPPP.PP
-        .....P..
-        ........
-        ........
-        ....p...
-        pppp.ppp
-        rnbqkbnr
-         */
+            /*
+            RNBQKBNR
+            PPPPP.PP
+            .....P..
+            ........
+            ........
+            ....p...
+            pppp.ppp
+            rnbqkbnr
+             */
             chessGame.movePiece(
                     new TerminalPosition(new Position(File.F, Rank.SEVENTH), new Position(File.F, Rank.SIXTH)));
 
-        /*
-        RNBQKBNR
-        PPPPP.PP
-        .....P..
-        .......q
-        ........
-        ....p...
-        pppp.ppp
-        rnb.kbnr
-         */
+            /*
+            RNBQKBNR
+            PPPPP.PP
+            .....P..
+            .......q
+            ........
+            ....p...
+            pppp.ppp
+            rnb.kbnr
+             */
             chessGame.movePiece(
                     new TerminalPosition(new Position(File.D, Rank.FIRST), new Position(File.H, Rank.FIFTH)));
 
-        /*
-        RNBQKB.R
-        PPPPP.PP
-        .....P.N
-        .......q
-        ........
-        ....p...
-        pppp.ppp
-        rnb.kbnr
-         */
+            /*
+            RNBQKB.R
+            PPPPP.PP
+            .....P.N
+            .......q
+            ........
+            ....p...
+            pppp.ppp
+            rnb.kbnr
+             */
             chessGame.movePiece(
                     new TerminalPosition(new Position(File.G, Rank.EIGHTH), new Position(File.H, Rank.SIXTH)));
 
-        /*
-        RNBQqB.R
-        PPPPP.PP
-        .....P.N
-        ........
-        ........
-        ....p...
-        pppp.ppp
-        rnb.kbnr
-         */
+            /*
+            RNBQqB.R
+            PPPPP.PP
+            .....P.N
+            ........
+            ........
+            ....p...
+            pppp.ppp
+            rnb.kbnr
+             */
             chessGame.movePiece(
                     new TerminalPosition(new Position(File.H, Rank.FIFTH), new Position(File.E, Rank.EIGHTH)));
 

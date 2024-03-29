@@ -10,14 +10,17 @@ import chess.domain.piece.Pawn;
 import chess.domain.piece.Piece;
 import chess.domain.piece.Queen;
 import chess.domain.piece.Rook;
+import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.TerminalPosition;
 import chess.domain.score.PieceScore;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
 public class ChessGame {
+    public static final double PAWN_PENALTY_SCORE = 0.5;
     private final Turn turn;
     private final ChessBoard board;
 
@@ -59,6 +62,17 @@ public class ChessGame {
     }
 
     private double calculateScore(Color color) {
+        return calculateTotalScore(color) - countPawnAtSameFile(color) * PAWN_PENALTY_SCORE;
+    }
+
+    private int countPawnAtSameFile(Color color) {
+        return Arrays.stream(File.values())
+                .map(file -> board.countPieceAtFile(Pawn.from(color), file))
+                .filter(count -> count > 1)
+                .reduce(0, Integer::sum);
+    }
+
+    private Double calculateTotalScore(Color color) {
         Set<Piece> pieces = Set.of(
                 Bishop.from(color), King.from(color), Knight.from(color),
                 Pawn.from(color), Queen.from(color), Rook.from(color));
