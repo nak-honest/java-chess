@@ -103,23 +103,46 @@ public class ChessBoardTest {
         }
     }
 
-    @DisplayName("king이 잡혔는지 구한다.")
-    @Test
-    void kingDeadTest() {
-        // given
-        Map<Position, Piece> pieces = provideEmptyBoard();
-        pieces.put(new Position(File.A, Rank.FIRST), King.from(Color.BLACK));
-        pieces.put(new Position(File.B, Rank.EIGHTH), King.from(Color.WHITE));
-        pieces.put(new Position(File.A, Rank.THIRD), Rook.from(Color.WHITE));
-        ChessBoard chessBoard = new ChessBoard(pieces);
+    @DisplayName("king이 잡혔는지에 대한 테스트")
+    @Nested
+    class IsKingDeadTest {
+        @DisplayName("black king이 잡혔는지 구한다.")
+        @Test
+        void blackKingDeadTest() {
+            // given
+            Map<Position, Piece> pieces = provideEmptyBoard();
+            pieces.put(new Position(File.A, Rank.FIRST), King.from(Color.BLACK));
+            pieces.put(new Position(File.B, Rank.EIGHTH), King.from(Color.WHITE));
+            pieces.put(new Position(File.A, Rank.THIRD), Rook.from(Color.WHITE));
+            ChessBoard chessBoard = new ChessBoard(pieces);
 
-        // when
-        chessBoard.move(new TerminalPosition(
-                new Position(File.A, Rank.THIRD),
-                new Position(File.A, Rank.FIRST)), Color.WHITE);
+            // when
+            chessBoard.move(new TerminalPosition(
+                    new Position(File.A, Rank.THIRD),
+                    new Position(File.A, Rank.FIRST)), Color.WHITE);
 
-        // then
-        assertThat(chessBoard.isKingDead()).isTrue();
+            // then
+            assertThat(chessBoard.isKingDead(Color.BLACK)).isTrue();
+        }
+
+        @DisplayName("white king이 잡혔는지 구한다.")
+        @Test
+        void whiteKingDeadTest() {
+            // given
+            Map<Position, Piece> pieces = provideEmptyBoard();
+            pieces.put(new Position(File.A, Rank.FIRST), King.from(Color.WHITE));
+            pieces.put(new Position(File.B, Rank.EIGHTH), King.from(Color.BLACK));
+            pieces.put(new Position(File.A, Rank.THIRD), Rook.from(Color.BLACK));
+            ChessBoard chessBoard = new ChessBoard(pieces);
+
+            // when
+            chessBoard.move(new TerminalPosition(
+                    new Position(File.A, Rank.THIRD),
+                    new Position(File.A, Rank.FIRST)), Color.BLACK);
+
+            // then
+            assertThat(chessBoard.isKingDead(Color.WHITE)).isTrue();
+        }
     }
 
     static Map<Position, Piece> provideEmptyBoard() {

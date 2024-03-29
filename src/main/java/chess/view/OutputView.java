@@ -35,6 +35,10 @@ public class OutputView {
             King.from(Color.WHITE), "k"
     );
     private static final Map<Piece, String> pieceViews = new HashMap<>();
+    private static final Map<Color, String> COLOR_VIEW = Map.of(
+            Color.BLACK, "블랙",
+            Color.WHITE, "화이트"
+    );
 
     static {
         pieceViews.putAll(BLACK_PIECE_VIEWS);
@@ -70,5 +74,9 @@ public class OutputView {
             Piece piece = pieces.get(new Position(file, rank));
             System.out.print(pieceViews.get(piece));
         }
+    }
+
+    public void printGameResult(Color winnerColor) {
+        System.out.println(String.format("%s팀이 승리하였습니다.", COLOR_VIEW.get(winnerColor)));
     }
 }

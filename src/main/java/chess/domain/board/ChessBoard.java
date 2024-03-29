@@ -106,14 +106,9 @@ public class ChessBoard {
         pieces.put(position, piece);
     }
 
-    public boolean isKingDead() {
-        return countKing() != 2;
-    }
-
-    private int countKing() {
-        return (int) pieces.values().stream()
-                .filter(piece -> piece.equals(King.from(Color.BLACK)) || piece.equals(King.from(Color.WHITE)))
-                .count();
+    public boolean isKingDead(Color color) {
+        return pieces.values().stream()
+                .noneMatch(piece -> piece.equals(King.from(color)));
     }
 
     @Override

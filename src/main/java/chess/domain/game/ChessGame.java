@@ -2,6 +2,7 @@ package chess.domain.game;
 
 import chess.domain.board.ChessBoard;
 import chess.domain.board.PiecePositions;
+import chess.domain.piece.Color;
 import chess.domain.piece.Piece;
 import chess.domain.position.Position;
 import chess.domain.position.TerminalPosition;
@@ -26,8 +27,17 @@ public class ChessGame {
         turn.process();
     }
 
-    public boolean isKingDead() {
-        return board.isKingDead();
+    public boolean isGameOver() {
+        return board.isKingDead(Color.BLACK) || board.isKingDead(Color.WHITE);
+    }
+
+
+    public Color winnerColor() {
+        if (board.isKingDead(Color.BLACK)) {
+            return Color.WHITE;
+        }
+
+        return Color.BLACK;
     }
 
     public Map<Position, Piece> getPieces() {

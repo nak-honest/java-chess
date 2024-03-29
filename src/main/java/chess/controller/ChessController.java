@@ -43,6 +43,13 @@ public class ChessController {
         outputView.printChessBoard(chessGame.getPieces());
 
         processGameUntilValid(chessGame);
+        printGameResult(chessGame);
+    }
+
+    private void printGameResult(ChessGame chessGame) {
+        if (chessGame.isGameOver()) {
+            outputView.printGameResult(chessGame.winnerColor());
+        }
     }
 
     private void processGameUntilValid(ChessGame chessGame) {
@@ -59,7 +66,7 @@ public class ChessController {
     }
 
     private Command receiveProcessCommand(ChessGame chessGame) {
-        if (chessGame.isKingDead()) {
+        if (chessGame.isGameOver()) {
             return Command.createNoArgCommand(CommandType.END);
         }
 
