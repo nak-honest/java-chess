@@ -3,11 +3,11 @@ package chess.controller;
 import chess.command.Command;
 import chess.command.CommandType;
 import chess.domain.game.ChessGame;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 import chess.util.ExceptionRetryHandler;
 import chess.view.InputView;
 import chess.view.OutputView;
-import chess.view.TerminalPositionView;
+import chess.view.StartEndPositionView;
 
 public class ChessController {
     private final InputView inputView;
@@ -89,8 +89,8 @@ public class ChessController {
 
     private void tryMove(Command command, ChessGame chessGame) {
         if (command.isMove()) {
-            TerminalPosition terminalPosition = TerminalPositionView.of(command.getArguments());
-            chessGame.movePiece(terminalPosition);
+            StartEndPosition startEndPosition = StartEndPositionView.of(command.getArguments());
+            chessGame.movePiece(startEndPosition);
             outputView.printChessBoard(chessGame.getPieces());
         }
     }

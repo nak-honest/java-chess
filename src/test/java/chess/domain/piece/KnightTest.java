@@ -3,7 +3,7 @@ package chess.domain.piece;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,11 +22,11 @@ public class KnightTest {
         void canTwoFileOneRankMoveTest() {
             // given
             Piece piece = Knight.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.C, Rank.SECOND));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.C, Rank.SECOND));
 
             // when & then
-            assertThat(piece.findPassPathTaken(terminalPosition))
+            assertThat(piece.findPassPathTaken(startEndPosition))
                     .isEqualTo(List.of());
         }
 
@@ -35,11 +35,11 @@ public class KnightTest {
         void canOneFileTwoRankMoveTest() {
             // given
             Piece piece = Knight.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.B, Rank.THIRD));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.B, Rank.THIRD));
 
             // when & then
-            assertThat(piece.findPassPathTaken(terminalPosition))
+            assertThat(piece.findPassPathTaken(startEndPosition))
                     .isEqualTo(List.of());
         }
 
@@ -48,11 +48,11 @@ public class KnightTest {
         void canNotMoveTest() {
             // given
             Piece piece = Knight.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.SECOND));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.SECOND));
 
             // when & then
-            assertThatThrownBy(() -> piece.findPassPathTaken(terminalPosition))
+            assertThatThrownBy(() -> piece.findPassPathTaken(startEndPosition))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("도착 위치는 체스 말이 도달할 수 없는 위치입니다.");
         }
@@ -66,11 +66,11 @@ public class KnightTest {
         void canTwoFileOneRankAttackTest() {
             // given
             Piece attackerPiece = Knight.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.C, Rank.SECOND));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.C, Rank.SECOND));
 
             // when & then
-            assertThat(attackerPiece.findAttackPathTaken(terminalPosition))
+            assertThat(attackerPiece.findAttackPathTaken(startEndPosition))
                     .isEqualTo(List.of());
         }
 
@@ -79,11 +79,11 @@ public class KnightTest {
         void canOneFileTwoRankAttackTest() {
             // given
             Piece attackerPiece = Knight.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.B, Rank.THIRD));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.B, Rank.THIRD));
 
             // when & then
-            assertThat(attackerPiece.findAttackPathTaken(terminalPosition))
+            assertThat(attackerPiece.findAttackPathTaken(startEndPosition))
                     .isEqualTo(List.of());
         }
 
@@ -92,11 +92,11 @@ public class KnightTest {
         void canNotAttackTest() {
             // given
             Piece attackerPiece = Knight.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.SECOND));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.SECOND));
 
             // when & then
-            assertThatThrownBy(() -> attackerPiece.findPassPathTaken(terminalPosition))
+            assertThatThrownBy(() -> attackerPiece.findPassPathTaken(startEndPosition))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("도착 위치는 체스 말이 도달할 수 없는 위치입니다.");
         }

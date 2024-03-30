@@ -1,10 +1,10 @@
 package chess.domain.position;
 
-public class TerminalPosition {
+public class StartEndPosition {
     private final Position start;
     private final Position end;
 
-    public TerminalPosition(Position start, Position end) {
+    public StartEndPosition(Position start, Position end) {
         validate(start, end);
         this.start = start;
         this.end = end;

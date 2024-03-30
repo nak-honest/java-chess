@@ -3,7 +3,7 @@ package chess.domain.piece;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,11 +22,11 @@ class BishopTest {
         void canMoveTest() {
             // given
             Piece piece = Bishop.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.C, Rank.THIRD));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.C, Rank.THIRD));
 
             // when & then
-            assertThat(piece.findPassPathTaken(terminalPosition))
+            assertThat(piece.findPassPathTaken(startEndPosition))
                     .isEqualTo(List.of(new Position(File.B, Rank.SECOND)));
         }
 
@@ -35,11 +35,11 @@ class BishopTest {
         void canNotMoveInvalidPathTest() {
             // given
             Piece piece = Bishop.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.C, Rank.FIRST));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.C, Rank.FIRST));
 
             // when & then
-            assertThatThrownBy(() -> piece.findPassPathTaken(terminalPosition))
+            assertThatThrownBy(() -> piece.findPassPathTaken(startEndPosition))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("도착 위치는 체스 말이 도달할 수 없는 위치입니다.");
         }
@@ -53,11 +53,11 @@ class BishopTest {
         void canAttackTest() {
             // given
             Piece attackerPiece = Bishop.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.C, Rank.THIRD));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.C, Rank.THIRD));
 
             // when & then
-            assertThat(attackerPiece.findAttackPathTaken(terminalPosition))
+            assertThat(attackerPiece.findAttackPathTaken(startEndPosition))
                     .isEqualTo(List.of(new Position(File.B, Rank.SECOND)));
         }
 
@@ -66,11 +66,11 @@ class BishopTest {
         void canNotAttackInvalidPathTest() {
             // given
             Piece attackerPiece = Bishop.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.C, Rank.FIRST));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.C, Rank.FIRST));
 
             // when & then
-            assertThatThrownBy(() -> attackerPiece.findAttackPathTaken(terminalPosition))
+            assertThatThrownBy(() -> attackerPiece.findAttackPathTaken(startEndPosition))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("도착 위치는 체스 말이 도달할 수 없는 위치입니다.");
         }

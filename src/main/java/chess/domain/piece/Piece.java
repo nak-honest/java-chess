@@ -2,7 +2,7 @@ package chess.domain.piece;
 
 import chess.domain.movement.Movements;
 import chess.domain.position.Position;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,9 +17,9 @@ public abstract class Piece {
         this.movements = movements;
     }
 
-    public abstract List<Position> findPassPathTaken(TerminalPosition terminalPosition);
+    public abstract List<Position> findPassPathTaken(StartEndPosition startEndPosition);
 
-    public abstract List<Position> findAttackPathTaken(TerminalPosition terminalPosition);
+    public abstract List<Position> findAttackPathTaken(StartEndPosition startEndPosition);
 
     public boolean isColor(Color color) {
         return this.color == color;

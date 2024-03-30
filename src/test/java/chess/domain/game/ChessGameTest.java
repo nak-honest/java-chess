@@ -4,7 +4,7 @@ import chess.domain.piece.Color;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -78,7 +78,7 @@ public class ChessGameTest {
             rnbqkbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.D, Rank.SECOND), new Position(File.D, Rank.FOURTH)));
+                    new StartEndPosition(new Position(File.D, Rank.SECOND), new Position(File.D, Rank.FOURTH)));
 
             /*
             RNBQKBNR
@@ -91,7 +91,7 @@ public class ChessGameTest {
             rnbqkbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.E, Rank.SEVENTH), new Position(File.E, Rank.FIFTH)));
+                    new StartEndPosition(new Position(File.E, Rank.SEVENTH), new Position(File.E, Rank.FIFTH)));
 
             /*
             RNBQKBNR
@@ -104,7 +104,7 @@ public class ChessGameTest {
             rnbqkbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.D, Rank.FOURTH), new Position(File.E, Rank.FIFTH)));
+                    new StartEndPosition(new Position(File.D, Rank.FOURTH), new Position(File.E, Rank.FIFTH)));
 
             /*
             RNBQKBNR
@@ -117,7 +117,7 @@ public class ChessGameTest {
             rnbqkbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.F, Rank.SEVENTH), new Position(File.F, Rank.SIXTH)));
+                    new StartEndPosition(new Position(File.F, Rank.SEVENTH), new Position(File.F, Rank.SIXTH)));
 
             /*
             RNBQKBNR
@@ -130,7 +130,7 @@ public class ChessGameTest {
             rnbqkbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.E, Rank.FIFTH), new Position(File.F, Rank.SIXTH)));
+                    new StartEndPosition(new Position(File.E, Rank.FIFTH), new Position(File.F, Rank.SIXTH)));
 
             return chessGame;
         }
@@ -204,7 +204,7 @@ public class ChessGameTest {
             rnbqkbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.F, Rank.SECOND), new Position(File.F, Rank.THIRD)));
+                    new StartEndPosition(new Position(File.F, Rank.SECOND), new Position(File.F, Rank.THIRD)));
 
             /*
             RNBQKBNR
@@ -217,7 +217,7 @@ public class ChessGameTest {
             rnbqkbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.E, Rank.SEVENTH), new Position(File.E, Rank.FIFTH)));
+                    new StartEndPosition(new Position(File.E, Rank.SEVENTH), new Position(File.E, Rank.FIFTH)));
 
             /*
             RNBQKBNR
@@ -230,7 +230,7 @@ public class ChessGameTest {
             rnbqkbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.G, Rank.SECOND), new Position(File.G, Rank.FOURTH)));
+                    new StartEndPosition(new Position(File.G, Rank.SECOND), new Position(File.G, Rank.FOURTH)));
 
             /*
             RNB.KBNR
@@ -243,7 +243,7 @@ public class ChessGameTest {
             rnbqkbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.D, Rank.EIGHTH), new Position(File.H, Rank.FOURTH)));
+                    new StartEndPosition(new Position(File.D, Rank.EIGHTH), new Position(File.H, Rank.FOURTH)));
 
             /*
             RNB.KBNR
@@ -256,7 +256,7 @@ public class ChessGameTest {
             rnbqkbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.H, Rank.SECOND), new Position(File.H, Rank.THIRD)));
+                    new StartEndPosition(new Position(File.H, Rank.SECOND), new Position(File.H, Rank.THIRD)));
 
             /*
             RNB.KBNR
@@ -269,7 +269,7 @@ public class ChessGameTest {
             rnbqQbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.H, Rank.FOURTH), new Position(File.E, Rank.FIRST)));
+                    new StartEndPosition(new Position(File.H, Rank.FOURTH), new Position(File.E, Rank.FIRST)));
 
             return chessGame;
         }
@@ -298,7 +298,7 @@ public class ChessGameTest {
             rnbqkbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.E, Rank.SECOND), new Position(File.E, Rank.THIRD)));
+                    new StartEndPosition(new Position(File.E, Rank.SECOND), new Position(File.E, Rank.THIRD)));
 
             /*
             RNBQKBNR
@@ -311,7 +311,7 @@ public class ChessGameTest {
             rnbqkbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.F, Rank.SEVENTH), new Position(File.F, Rank.SIXTH)));
+                    new StartEndPosition(new Position(File.F, Rank.SEVENTH), new Position(File.F, Rank.SIXTH)));
 
             /*
             RNBQKBNR
@@ -324,7 +324,7 @@ public class ChessGameTest {
             rnb.kbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.D, Rank.FIRST), new Position(File.H, Rank.FIFTH)));
+                    new StartEndPosition(new Position(File.D, Rank.FIRST), new Position(File.H, Rank.FIFTH)));
 
             /*
             RNBQKB.R
@@ -337,7 +337,7 @@ public class ChessGameTest {
             rnb.kbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.G, Rank.EIGHTH), new Position(File.H, Rank.SIXTH)));
+                    new StartEndPosition(new Position(File.G, Rank.EIGHTH), new Position(File.H, Rank.SIXTH)));
 
             /*
             RNBQqB.R
@@ -350,7 +350,7 @@ public class ChessGameTest {
             rnb.kbnr
              */
             chessGame.movePiece(
-                    new TerminalPosition(new Position(File.H, Rank.FIFTH), new Position(File.E, Rank.EIGHTH)));
+                    new StartEndPosition(new Position(File.H, Rank.FIFTH), new Position(File.E, Rank.EIGHTH)));
 
             return chessGame;
         }

@@ -6,7 +6,7 @@ import chess.domain.piece.Piece;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,18 +26,18 @@ public class ChessBoard {
         return Collections.unmodifiableMap(pieces);
     }
 
-    public void move(TerminalPosition terminalPosition, Color currentTurn) {
-        validate(terminalPosition, currentTurn);
-        if (getPiece(terminalPosition.getEnd()) == Empty.getInstance()) {
-            passPiece(terminalPosition);
+    public void move(StartEndPosition startEndPosition, Color currentTurn) {
+        validate(startEndPosition, currentTurn);
+        if (getPiece(startEndPosition.getEnd()) == Empty.getInstance()) {
+            passPiece(startEndPosition);
             return;
         }
-        attackPiece(terminalPosition);
+        attackPiece(startEndPosition);
     }
 
-    private void validate(TerminalPosition terminalPosition, Color currentTurn) {
-        validateStartFriendly(terminalPosition.getStart(), currentTurn);
-        validateEndNotFriendly(terminalPosition.getEnd(), currentTurn);
+    private void validate(StartEndPosition startEndPosition, Color currentTurn) {
+        validateStartFriendly(startEndPosition.getStart(), currentTurn);
+        validateEndNotFriendly(startEndPosition.getEnd(), currentTurn);
     }
 
     private void validateStartFriendly(Position startPosition, Color friendlyColor) {
@@ -69,25 +69,25 @@ public class ChessBoard {
         return !isFriendly(position, friendlyColor);
     }
 
-    private void passPiece(TerminalPosition terminalPosition) {
-        Piece startPiece = getPiece(terminalPosition.getStart());
-        validateObstacle(startPiece.findPassPathTaken(terminalPosition));
+    private void passPiece(StartEndPosition startEndPosition) {
+        Piece startPiece = getPiece(startEndPosition.getStart());
+        validateObstacle(startPiece.findPassPathTaken(startEndPosition));
 
-        exchange(terminalPosition, startPiece);
+        exchange(startEndPosition, startPiece);
     }
 
-    private void exchange(TerminalPosition terminalPosition, Piece startPiece) {
-        Piece temp = getPiece(terminalPosition.getEnd());
-        putPiece(terminalPosition.getEnd(), startPiece);
-        putPiece(terminalPosition.getStart(), temp);
+    private void exchange(StartEndPosition startEndPosition, Piece startPiece) {
+        Piece temp = getPiece(startEndPosition.getEnd());
+        putPiece(startEndPosition.getEnd(), startPiece);
+        putPiece(startEndPosition.getStart(), temp);
     }
 
-    private void attackPiece(TerminalPosition terminalPosition) {
-        Piece startPiece = getPiece(terminalPosition.getStart());
-        validateObstacle(startPiece.findAttackPathTaken(terminalPosition));
+    private void attackPiece(StartEndPosition startEndPosition) {
+        Piece startPiece = getPiece(startEndPosition.getStart());
+        validateObstacle(startPiece.findAttackPathTaken(startEndPosition));
 
-        putPiece(terminalPosition.getEnd(), startPiece);
-        putPiece(terminalPosition.getStart(), Empty.getInstance());
+        putPiece(startEndPosition.getEnd(), startPiece);
+        putPiece(startEndPosition.getStart(), Empty.getInstance());
     }
 
     private void validateObstacle(List<Position> pathTaken) {

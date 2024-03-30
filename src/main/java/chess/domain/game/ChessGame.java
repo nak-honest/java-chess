@@ -6,7 +6,7 @@ import chess.domain.piece.Color;
 import chess.domain.piece.King;
 import chess.domain.piece.Piece;
 import chess.domain.position.Position;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 import chess.domain.score.PieceScore;
 
 import java.util.Map;
@@ -25,8 +25,8 @@ public class ChessGame {
         return new ChessGame(Turn.createOnStart(), PiecePositions.createBoard());
     }
 
-    public void movePiece(TerminalPosition terminalPosition) {
-        board.move(terminalPosition, turn.getCurrentTurn());
+    public void movePiece(StartEndPosition startEndPosition) {
+        board.move(startEndPosition, turn.getCurrentTurn());
         turn.process();
     }
 

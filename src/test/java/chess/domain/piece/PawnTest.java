@@ -3,7 +3,7 @@ package chess.domain.piece;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -25,11 +25,11 @@ class PawnTest {
         void blackCanMoveTwoStraightTest() {
             // given
             Piece piece = Pawn.from(Color.BLACK);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.SEVENTH), new Position(File.A, Rank.FIFTH));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.SEVENTH), new Position(File.A, Rank.FIFTH));
 
             // when & then
-            assertThat(piece.findPassPathTaken(terminalPosition))
+            assertThat(piece.findPassPathTaken(startEndPosition))
                     .isEqualTo(List.of(new Position(File.A, Rank.SIXTH)));
         }
 
@@ -38,11 +38,11 @@ class PawnTest {
         void blackCanNotMoveTwoStraightTest() {
             // given
             Piece piece = Pawn.from(Color.BLACK);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.SIXTH), new Position(File.A, Rank.FOURTH));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.SIXTH), new Position(File.A, Rank.FOURTH));
 
             // when & then
-            assertThatThrownBy(() -> piece.findPassPathTaken(terminalPosition))
+            assertThatThrownBy(() -> piece.findPassPathTaken(startEndPosition))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("도착 위치는 체스 말이 도달할 수 없는 위치입니다.");
         }
@@ -52,11 +52,11 @@ class PawnTest {
         void blackCanStraightMoveTest() {
             // given
             Piece piece = Pawn.from(Color.BLACK);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.SEVENTH), new Position(File.A, Rank.SIXTH));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.SEVENTH), new Position(File.A, Rank.SIXTH));
 
             // when & then
-            assertThat(piece.findPassPathTaken(terminalPosition))
+            assertThat(piece.findPassPathTaken(startEndPosition))
                     .isEqualTo(List.of());
         }
 
@@ -66,10 +66,10 @@ class PawnTest {
         void blackCanNotStraightMoveTest(Position endPosition) {
             // given
             Piece piece = Pawn.from(Color.BLACK);
-            TerminalPosition terminalPosition = new TerminalPosition(new Position(File.B, Rank.SEVENTH), endPosition);
+            StartEndPosition startEndPosition = new StartEndPosition(new Position(File.B, Rank.SEVENTH), endPosition);
 
             // when & then
-            assertThatThrownBy(() -> piece.findPassPathTaken(terminalPosition))
+            assertThatThrownBy(() -> piece.findPassPathTaken(startEndPosition))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("도착 위치는 체스 말이 도달할 수 없는 위치입니다.");
         }
@@ -92,11 +92,11 @@ class PawnTest {
         void whiteCanMoveTwoStraightTest() {
             // given
             Piece piece = Pawn.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.SECOND), new Position(File.A, Rank.FOURTH));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.SECOND), new Position(File.A, Rank.FOURTH));
 
             // when & then
-            assertThat(piece.findPassPathTaken(terminalPosition))
+            assertThat(piece.findPassPathTaken(startEndPosition))
                     .isEqualTo(List.of(new Position(File.A, Rank.THIRD)));
         }
 
@@ -105,11 +105,11 @@ class PawnTest {
         void whiteCanNotMoveTwoStraightTest() {
             // given
             Piece piece = Pawn.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.THIRD), new Position(File.A, Rank.FIFTH));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.THIRD), new Position(File.A, Rank.FIFTH));
 
             // when & then
-            assertThatThrownBy(() -> piece.findPassPathTaken(terminalPosition))
+            assertThatThrownBy(() -> piece.findPassPathTaken(startEndPosition))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("도착 위치는 체스 말이 도달할 수 없는 위치입니다.");
         }
@@ -119,11 +119,11 @@ class PawnTest {
         void whiteCanStraightMoveTest() {
             // given
             Piece piece = Pawn.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.THIRD), new Position(File.A, Rank.FOURTH));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.THIRD), new Position(File.A, Rank.FOURTH));
 
             // when & then
-            assertThat(piece.findPassPathTaken(terminalPosition))
+            assertThat(piece.findPassPathTaken(startEndPosition))
                     .isEqualTo(List.of());
         }
 
@@ -133,10 +133,10 @@ class PawnTest {
         void canStraightNotMoveTest(Position endPosition) {
             // given
             Piece piece = Pawn.from(Color.WHITE);
-            TerminalPosition terminalPosition = new TerminalPosition(new Position(File.B, Rank.SECOND), endPosition);
+            StartEndPosition startEndPosition = new StartEndPosition(new Position(File.B, Rank.SECOND), endPosition);
 
             // when & then
-            assertThatThrownBy(() -> piece.findPassPathTaken(terminalPosition))
+            assertThatThrownBy(() -> piece.findPassPathTaken(startEndPosition))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("도착 위치는 체스 말이 도달할 수 없는 위치입니다.");
         }
@@ -159,11 +159,11 @@ class PawnTest {
         void blackCanLeftDownAttackTest() {
             // given
             Piece attackerPiece = Pawn.from(Color.BLACK);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.B, Rank.SEVENTH), new Position(File.A, Rank.SIXTH));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.B, Rank.SEVENTH), new Position(File.A, Rank.SIXTH));
 
             // when & then
-            assertThat(attackerPiece.findAttackPathTaken(terminalPosition))
+            assertThat(attackerPiece.findAttackPathTaken(startEndPosition))
                     .isEqualTo(List.of());
         }
 
@@ -172,11 +172,11 @@ class PawnTest {
         void blackCanRightDownAttackTest() {
             // given
             Piece attackerPiece = Pawn.from(Color.BLACK);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.B, Rank.SEVENTH), new Position(File.C, Rank.SIXTH));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.B, Rank.SEVENTH), new Position(File.C, Rank.SIXTH));
 
             // when & then
-            assertThat(attackerPiece.findAttackPathTaken(terminalPosition))
+            assertThat(attackerPiece.findAttackPathTaken(startEndPosition))
                     .isEqualTo(List.of());
         }
 
@@ -186,11 +186,11 @@ class PawnTest {
         void blackCanNotAttackTest(Position attackedPosition) {
             // given
             Piece attackerPiece = Pawn.from(Color.BLACK);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.B, Rank.SEVENTH), attackedPosition);
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.B, Rank.SEVENTH), attackedPosition);
 
             // when & then
-            assertThatThrownBy(() -> attackerPiece.findAttackPathTaken(terminalPosition))
+            assertThatThrownBy(() -> attackerPiece.findAttackPathTaken(startEndPosition))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("도착 위치는 체스 말이 도달할 수 없는 위치입니다.");
         }
@@ -215,11 +215,11 @@ class PawnTest {
         void whiteCanLeftDownAttackTest() {
             // given
             Piece attackerPiece = Pawn.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.B, Rank.SEVENTH), new Position(File.A, Rank.EIGHTH));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.B, Rank.SEVENTH), new Position(File.A, Rank.EIGHTH));
 
             // when & then
-            assertThat(attackerPiece.findAttackPathTaken(terminalPosition))
+            assertThat(attackerPiece.findAttackPathTaken(startEndPosition))
                     .isEqualTo(List.of());
         }
 
@@ -228,11 +228,11 @@ class PawnTest {
         void whiteCanRightDownAttackTest() {
             // given
             Piece attackerPiece = Pawn.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.B, Rank.SEVENTH), new Position(File.C, Rank.EIGHTH));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.B, Rank.SEVENTH), new Position(File.C, Rank.EIGHTH));
 
             // when & then
-            assertThat(attackerPiece.findAttackPathTaken(terminalPosition))
+            assertThat(attackerPiece.findAttackPathTaken(startEndPosition))
                     .isEqualTo(List.of());
         }
 
@@ -242,11 +242,11 @@ class PawnTest {
         void whiteCanNotAttackTest(Position attackedPosition) {
             // given
             Piece attackerPiece = Pawn.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.B, Rank.SEVENTH), attackedPosition);
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.B, Rank.SEVENTH), attackedPosition);
 
             // when & then
-            assertThatThrownBy(() -> attackerPiece.findAttackPathTaken(terminalPosition))
+            assertThatThrownBy(() -> attackerPiece.findAttackPathTaken(startEndPosition))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("도착 위치는 체스 말이 도달할 수 없는 위치입니다.");
         }

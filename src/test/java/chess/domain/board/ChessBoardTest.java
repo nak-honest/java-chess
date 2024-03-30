@@ -9,7 +9,7 @@ import chess.domain.piece.Rook;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -32,12 +32,12 @@ public class ChessBoardTest {
             // given
             Map<Position, Piece> pieces = provideEmptyBoard();
             ChessBoard chessBoard = new ChessBoard(pieces);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.B, Rank.SECOND));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.B, Rank.SECOND));
             Color currentTurn = Color.BLACK;
 
             // when & then
-            assertThatThrownBy(() -> chessBoard.move(terminalPosition, currentTurn))
+            assertThatThrownBy(() -> chessBoard.move(startEndPosition, currentTurn))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("시작 위치에 아군 체스말이 존재해야 합니다.");
         }
@@ -50,12 +50,12 @@ public class ChessBoardTest {
             pieces.put(new Position(File.A, Rank.FIRST), Rook.from(Color.WHITE));
             pieces.put(new Position(File.A, Rank.SECOND), Rook.from(Color.WHITE));
             ChessBoard chessBoard = new ChessBoard(pieces);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.SECOND));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.SECOND));
             Color currentTurn = Color.WHITE;
 
             // when & then
-            assertThatThrownBy(() -> chessBoard.move(terminalPosition, currentTurn))
+            assertThatThrownBy(() -> chessBoard.move(startEndPosition, currentTurn))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("도착 위치에 아군 체스말이 존재할 수 없습니다.");
         }
@@ -75,7 +75,7 @@ public class ChessBoardTest {
             expected.put(new Position(File.B, Rank.FIRST), Rook.from(Color.WHITE));
 
             // when
-            chessBoard.move(new TerminalPosition(
+            chessBoard.move(new StartEndPosition(
                     new Position(File.A, Rank.FIRST),
                     new Position(File.B, Rank.FIRST)), Color.WHITE);
 
@@ -95,7 +95,7 @@ public class ChessBoardTest {
             expected.put(new Position(File.B, Rank.FIRST), Rook.from(Color.WHITE));
 
             // when
-            chessBoard.move(new TerminalPosition(
+            chessBoard.move(new StartEndPosition(
                     new Position(File.A, Rank.FIRST),
                     new Position(File.B, Rank.FIRST)), Color.WHITE);
 

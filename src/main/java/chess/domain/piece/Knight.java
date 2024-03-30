@@ -4,7 +4,7 @@ import chess.domain.movement.Movements;
 import chess.domain.movement.MovementsFactory;
 import chess.domain.movement.UnitMovement;
 import chess.domain.position.Position;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 
 import java.util.List;
 import java.util.Map;
@@ -27,12 +27,12 @@ public class Knight extends Piece {
     }
 
     @Override
-    public List<Position> findPassPathTaken(TerminalPosition terminalPosition) {
-        return movements.findPassPathTaken(terminalPosition, MAX_MOVE_COUNT);
+    public List<Position> findPassPathTaken(StartEndPosition startEndPosition) {
+        return movements.findPassPathTaken(startEndPosition, MAX_MOVE_COUNT);
     }
 
     @Override
-    public List<Position> findAttackPathTaken(TerminalPosition terminalPosition) {
-        return movements.findAttackPathTaken(terminalPosition, MAX_MOVE_COUNT);
+    public List<Position> findAttackPathTaken(StartEndPosition startEndPosition) {
+        return movements.findAttackPathTaken(startEndPosition, MAX_MOVE_COUNT);
     }
 }
