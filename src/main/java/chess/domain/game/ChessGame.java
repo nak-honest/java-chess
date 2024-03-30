@@ -2,6 +2,8 @@ package chess.domain.game;
 
 import chess.domain.board.ChessBoard;
 import chess.domain.board.PiecePositions;
+import chess.domain.game.state.NotStartState;
+import chess.domain.game.state.State;
 import chess.domain.piece.Color;
 import chess.domain.piece.King;
 import chess.domain.piece.Piece;
@@ -12,26 +14,36 @@ import chess.domain.score.PieceScore;
 import java.util.Map;
 
 public class ChessGame {
-    public static final double PAWN_PENALTY_SCORE = 0.5;
-    private final Turn turn;
+    private State state;
     private final ChessBoard board;
 
-    public ChessGame(Turn turn, ChessBoard board) {
-        this.turn = turn;
+    private ChessGame(State state, ChessBoard board) {
+        this.state = state;
         this.board = board;
     }
 
-    public static ChessGame createOnStart() {
-        return new ChessGame(Turn.createOnStart(), PiecePositions.createBoard());
+    public static ChessGame create() {
+        return new ChessGame(new NotStartState(), PiecePositions.createBoard());
+    }
+
+    public void startGame() {
+        state = state.start();
     }
 
     public void movePiece(StartEndPosition startEndPosition) {
-        board.move(startEndPosition, turn.getCurrentTurn());
-        turn.process();
+        state = state.move(board, startEndPosition);
     }
 
-    public boolean isGameOver() {
+    public void endGame() {
+        state = state.end();
+    }
+
+    public boolean isKingDead() {
         return isKingDead(Color.BLACK) || isKingDead(Color.WHITE);
+    }
+
+    public boolean isNotProcess() {
+        return !state.isProcess();
     }
 
     public Color winnerColor() {
@@ -47,13 +59,17 @@ public class ChessGame {
     }
 
     public Map<Color, Double> status() {
+        if (!state.isProcess()) {
+            throw new IllegalArgumentException("게임이 진행중인 상태가 아닙니다.");
+        }
+
         return PieceScore.status(board);
     }
 
     @Override
     public String toString() {
         return "ChessGame{" +
-                "turn=" + turn +
+                "state=" + state +
                 ", board=" + board +
                 '}';
     }

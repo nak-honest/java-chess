@@ -41,6 +41,10 @@ public class Command {
         return type == CommandType.STATUS;
     }
 
+    public CommandType getType() {
+        return type;
+    }
+
     public List<String> getArguments() {
         return arguments;
     }

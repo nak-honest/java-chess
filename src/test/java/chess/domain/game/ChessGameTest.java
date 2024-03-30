@@ -22,7 +22,8 @@ public class ChessGameTest {
         @Test
         void calculateInitScoreTest() {
             // given
-            ChessGame chessGame = ChessGame.createOnStart();
+            ChessGame chessGame = ChessGame.create();
+            chessGame.startGame();
 
             // when & then
             assertThat(chessGame.status()).isEqualTo(Map.of(
@@ -65,7 +66,8 @@ public class ChessGameTest {
             pppppppp
             rnbqkbnr
              */
-            ChessGame chessGame = ChessGame.createOnStart();
+            ChessGame chessGame = ChessGame.create();
+            chessGame.startGame();
 
             /*
             RNBQKBNR
@@ -143,10 +145,10 @@ public class ChessGameTest {
         @Test
         void kingNotDeadTest() {
             // given
-            ChessGame chessGame = ChessGame.createOnStart();
+            ChessGame chessGame = ChessGame.create();
 
             // when & then
-            assertThat(chessGame.isGameOver()).isFalse();
+            assertThat(chessGame.isKingDead()).isFalse();
         }
 
         @DisplayName("king이 잡히면 게임이 종료된다.")
@@ -156,7 +158,7 @@ public class ChessGameTest {
             ChessGame chessGame = provideChessGameAsWhiteKingDead();
 
             // when & then
-            assertThat(chessGame.isGameOver()).isTrue();
+            assertThat(chessGame.isKingDead()).isTrue();
         }
 
         @DisplayName("white 킹이 잡히면 black의 승리이다.")
@@ -191,7 +193,8 @@ public class ChessGameTest {
             pppppppp
             rnbqkbnr
              */
-            ChessGame chessGame = ChessGame.createOnStart();
+            ChessGame chessGame = ChessGame.create();
+            chessGame.startGame();
 
             /*
             RNBQKBNR
@@ -285,7 +288,8 @@ public class ChessGameTest {
             pppppppp
             rnbqkbnr
              */
-            ChessGame chessGame = ChessGame.createOnStart();
+            ChessGame chessGame = ChessGame.create();
+            chessGame.startGame();
 
             /*
             RNBQKBNR

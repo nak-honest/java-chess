@@ -1,12 +1,11 @@
 package chess.view;
 
-import chess.command.Command;
 import chess.command.CommandType;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class InputView {
 
@@ -30,28 +29,22 @@ public class InputView {
         return INSTANCE;
     }
 
-    public Command readCommand() {
-        String input = scanner.nextLine();
-        List<String> commandTypeAndArgs = Arrays.asList(input.split(COMMAND_DELIMITER));
-        CommandType commandType = makeCommandType(commandTypeAndArgs);
-
-        if (commandType == CommandType.MOVE) {
-            List<String> argsText = commandTypeAndArgs.subList(COMMAND_TYPE_INDEX + 1, commandTypeAndArgs.size());
-            return new Command(commandType, argsText);
-        }
-
-        return Command.createNoArgCommand(commandType);
+    public CommandType readCommand() {
+        String command = scanner.next();
+        validateExistCommand(command);
+        return COMMANDS.get(command);
     }
 
-    private CommandType makeCommandType(List<String> splittedCommand) {
-        String commandTypeText = splittedCommand.get(COMMAND_TYPE_INDEX);
-        validateExistCommand(commandTypeText);
-        return COMMANDS.get(commandTypeText);
-    }
 
     private void validateExistCommand(String commandText) {
         if (!COMMANDS.containsKey(commandText)) {
             throw new IllegalArgumentException("존재하지 않는 커맨드입니다.");
         }
+    }
+
+    public List<String> readArguments(int count) {
+        return Stream.generate(scanner::next)
+                .limit(count)
+                .toList();
     }
 }
