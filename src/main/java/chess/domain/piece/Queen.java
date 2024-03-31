@@ -19,11 +19,11 @@ public class Queen extends Piece {
                     .collect(Collectors.toSet());
     private static final Movements COMMON_MOVEMENTS = new Movements(COMMON_UNIT_MOVEMENTS, COMMON_UNIT_MOVEMENTS);
     private static final Map<Color, Queen> QUEEN_POOL = Map.of(
-            Color.BLACK, new Queen(Color.BLACK, COMMON_MOVEMENTS),
-            Color.WHITE, new Queen(Color.WHITE, COMMON_MOVEMENTS));
+            Color.BLACK, new Queen(Color.BLACK),
+            Color.WHITE, new Queen(Color.WHITE));
 
-    private Queen(Color color, Movements movements) {
-        super(color, movements);
+    private Queen(Color color) {
+        super(color);
     }
 
     public static Queen from(Color color) {
@@ -32,11 +32,11 @@ public class Queen extends Piece {
 
     @Override
     public List<Position> findPassPathTaken(StartEndPosition startEndPosition) {
-        return movements.findPassPathTaken(startEndPosition, MAX_MOVE_COUNT);
+        return COMMON_MOVEMENTS.findPassPathTaken(startEndPosition, MAX_MOVE_COUNT);
     }
 
     @Override
     public List<Position> findAttackPathTaken(StartEndPosition startEndPosition) {
-        return movements.findAttackPathTaken(startEndPosition, MAX_MOVE_COUNT);
+        return COMMON_MOVEMENTS.findAttackPathTaken(startEndPosition, MAX_MOVE_COUNT);
     }
 }

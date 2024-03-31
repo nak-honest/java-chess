@@ -15,11 +15,11 @@ public class Rook extends Piece {
     private static final Set<UnitMovement> COMMON_UNIT_MOVEMENTS = MovementsFactory.createStraight();
     private static final Movements COMMON_MOVEMENTS = new Movements(COMMON_UNIT_MOVEMENTS, COMMON_UNIT_MOVEMENTS);
     private static final Map<Color, Rook> ROOK_POOL = Map.of(
-            Color.BLACK, new Rook(Color.BLACK, COMMON_MOVEMENTS),
-            Color.WHITE, new Rook(Color.WHITE, COMMON_MOVEMENTS));
+            Color.BLACK, new Rook(Color.BLACK),
+            Color.WHITE, new Rook(Color.WHITE));
 
-    private Rook(Color color, Movements movements) {
-        super(color, movements);
+    private Rook(Color color) {
+        super(color);
     }
 
     public static Rook from(Color color) {
@@ -28,11 +28,11 @@ public class Rook extends Piece {
 
     @Override
     public List<Position> findPassPathTaken(StartEndPosition startEndPosition) {
-        return movements.findPassPathTaken(startEndPosition, MAX_MOVE_COUNT);
+        return COMMON_MOVEMENTS.findPassPathTaken(startEndPosition, MAX_MOVE_COUNT);
     }
 
     @Override
     public List<Position> findAttackPathTaken(StartEndPosition startEndPosition) {
-        return movements.findAttackPathTaken(startEndPosition, MAX_MOVE_COUNT);
+        return COMMON_MOVEMENTS.findAttackPathTaken(startEndPosition, MAX_MOVE_COUNT);
     }
 }

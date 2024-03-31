@@ -9,7 +9,7 @@ public class Empty extends Piece {
     private static final Empty INSTANCE = new Empty();
 
     private Empty() {
-        super(null, null);
+        super(null);
     }
 
     public static Empty getInstance() {

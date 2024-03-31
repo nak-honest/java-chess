@@ -15,11 +15,11 @@ public class Bishop extends Piece {
     private static final Set<UnitMovement> COMMON_UNIT_MOVEMENTS = MovementsFactory.createDiagonal();
     private static final Movements COMMON_MOVEMENTS = new Movements(COMMON_UNIT_MOVEMENTS, COMMON_UNIT_MOVEMENTS);
     private static final Map<Color, Bishop> BISHOP_POOL = Map.of(
-            Color.BLACK, new Bishop(Color.BLACK, COMMON_MOVEMENTS),
-            Color.WHITE, new Bishop(Color.WHITE, COMMON_MOVEMENTS));
+            Color.BLACK, new Bishop(Color.BLACK),
+            Color.WHITE, new Bishop(Color.WHITE));
 
-    private Bishop(Color color, Movements movements) {
-        super(color, movements);
+    private Bishop(Color color) {
+        super(color);
     }
 
     public static Bishop from(Color color) {
@@ -28,11 +28,11 @@ public class Bishop extends Piece {
 
     @Override
     public List<Position> findPassPathTaken(StartEndPosition startEndPosition) {
-        return movements.findPassPathTaken(startEndPosition, MAX_MOVE_COUNT);
+        return COMMON_MOVEMENTS.findPassPathTaken(startEndPosition, MAX_MOVE_COUNT);
     }
 
     @Override
     public List<Position> findAttackPathTaken(StartEndPosition startEndPosition) {
-        return movements.findAttackPathTaken(startEndPosition, MAX_MOVE_COUNT);
+        return COMMON_MOVEMENTS.findAttackPathTaken(startEndPosition, MAX_MOVE_COUNT);
     }
 }

@@ -19,11 +19,11 @@ public class King extends Piece {
                     .collect(Collectors.toSet());
     private static final Movements COMMON_MOVEMENTS = new Movements(COMMON_UNIT_MOVEMENTS, COMMON_UNIT_MOVEMENTS);
     private static final Map<Color, King> KING_POOL = Map.of(
-            Color.BLACK, new King(Color.BLACK, COMMON_MOVEMENTS),
-            Color.WHITE, new King(Color.WHITE, COMMON_MOVEMENTS));
+            Color.BLACK, new King(Color.BLACK),
+            Color.WHITE, new King(Color.WHITE));
 
-    private King(Color color, Movements movements) {
-        super(color, movements);
+    private King(Color color) {
+        super(color);
     }
 
     public static King from(Color color) {
@@ -32,11 +32,11 @@ public class King extends Piece {
 
     @Override
     public List<Position> findPassPathTaken(StartEndPosition startEndPosition) {
-        return movements.findPassPathTaken(startEndPosition, MAX_MOVE_COUNT);
+        return COMMON_MOVEMENTS.findPassPathTaken(startEndPosition, MAX_MOVE_COUNT);
     }
 
     @Override
     public List<Position> findAttackPathTaken(StartEndPosition startEndPosition) {
-        return movements.findAttackPathTaken(startEndPosition, MAX_MOVE_COUNT);
+        return COMMON_MOVEMENTS.findAttackPathTaken(startEndPosition, MAX_MOVE_COUNT);
     }
 }

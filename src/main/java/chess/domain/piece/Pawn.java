@@ -22,13 +22,15 @@ public class Pawn extends Piece {
     private static final Movements WHITE_MOVEMENTS = new Movements(
             Set.of(UnitMovement.UP),
             Set.of(UnitMovement.LEFT_UP, UnitMovement.RIGHT_UP));
-
+    private static final Map<Color, Movements> COLOR_MOVEMENTS = Map.of(
+            Color.BLACK, BLACK_MOVEMENTS,
+            Color.WHITE, WHITE_MOVEMENTS);
     private static final Map<Color, Pawn> PAWN_POOL = Map.of(
-            Color.BLACK, new Pawn(Color.BLACK, BLACK_MOVEMENTS),
-            Color.WHITE, new Pawn(Color.WHITE, WHITE_MOVEMENTS));
+            Color.BLACK, new Pawn(Color.BLACK),
+            Color.WHITE, new Pawn(Color.WHITE));
 
-    private Pawn(Color color, Movements movements) {
-        super(color, movements);
+    private Pawn(Color color) {
+        super(color);
     }
 
     public static Pawn from(Color color) {
@@ -37,7 +39,7 @@ public class Pawn extends Piece {
 
     @Override
     public List<Position> findPassPathTaken(StartEndPosition startEndPosition) {
-        return movements.findPassPathTaken(startEndPosition, maxPassMoveCount(startEndPosition));
+        return movements().findPassPathTaken(startEndPosition, maxPassMoveCount(startEndPosition));
     }
 
     protected int maxPassMoveCount(StartEndPosition startEndPosition) {
@@ -60,6 +62,10 @@ public class Pawn extends Piece {
 
     @Override
     public List<Position> findAttackPathTaken(StartEndPosition startEndPosition) {
-        return movements.findAttackPathTaken(startEndPosition, MAX_ATTACK_MOVE_COUNT);
+        return movements().findAttackPathTaken(startEndPosition, MAX_ATTACK_MOVE_COUNT);
+    }
+
+    private Movements movements() {
+        return COLOR_MOVEMENTS.get(getColor());
     }
 }
