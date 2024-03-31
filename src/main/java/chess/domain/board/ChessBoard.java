@@ -14,16 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// TODO: 하위 문제들을 객체로 분리하는 것 고려해보기
 public class ChessBoard {
     private final Map<Position, Piece> pieces;
 
     public ChessBoard(Map<Position, Piece> pieces) {
         this.pieces = new HashMap<>(pieces);
-    }
-
-    public Map<Position, Piece> getPieces() {
-        return Collections.unmodifiableMap(pieces);
     }
 
     public void move(StartEndPosition startEndPosition, Color currentTurn) {
@@ -36,37 +31,11 @@ public class ChessBoard {
     }
 
     private void validate(StartEndPosition startEndPosition, Color currentTurn) {
-        validateStartFriendly(startEndPosition.getStart(), currentTurn);
-        validateEndNotFriendly(startEndPosition.getEnd(), currentTurn);
-    }
+        StartAndEndValidator validator = StartAndEndValidator.getInstance();
+        Piece startPiece = getPiece(startEndPosition.getStart());
+        Piece endPiece = getPiece(startEndPosition.getEnd());
 
-    private void validateStartFriendly(Position startPosition, Color friendlyColor) {
-        if (isEmpty(startPosition) || isEnemy(startPosition, friendlyColor)) {
-            throw new IllegalArgumentException("시작 위치에 아군 체스말이 존재해야 합니다.");
-        }
-    }
-
-    private void validateEndNotFriendly(Position endPosition, Color currentTurn) {
-        if (isNotEmpty(endPosition) && isFriendly(endPosition, currentTurn)) {
-            throw new IllegalArgumentException("도착 위치에 아군 체스말이 존재할 수 없습니다.");
-        }
-    }
-
-    private boolean isEmpty(Position position) {
-        return getPiece(position) == Empty.getInstance();
-    }
-
-    private boolean isNotEmpty(Position position) {
-        return !isEmpty(position);
-    }
-
-    private boolean isFriendly(Position position, Color friendlyColor) {
-        Piece startPiece = getPiece(position);
-        return startPiece.isColor(friendlyColor);
-    }
-
-    private boolean isEnemy(Position position, Color friendlyColor) {
-        return !isFriendly(position, friendlyColor);
+        validator.validate(startPiece, endPiece, currentTurn);
     }
 
     private void passPiece(StartEndPosition startEndPosition) {
@@ -101,6 +70,10 @@ public class ChessBoard {
                 .anyMatch(this::isNotEmpty);
     }
 
+    private boolean isNotEmpty(Position position) {
+        return getPiece(position) != Empty.getInstance();
+    }
+
     private Piece getPiece(Position position) {
         return pieces.get(position);
     }
@@ -127,5 +100,9 @@ public class ChessBoard {
         return "ChessBoard{" +
                 "pieces=" + pieces +
                 '}';
+    }
+
+    public Map<Position, Piece> getPieces() {
+        return Collections.unmodifiableMap(pieces);
     }
 }
