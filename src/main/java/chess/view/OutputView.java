@@ -35,6 +35,10 @@ public class OutputView {
             King.from(Color.WHITE), "k"
     );
     private static final Map<Piece, String> pieceViews = new HashMap<>();
+    private static final Map<Color, String> COLOR_VIEW = Map.of(
+            Color.BLACK, "블랙",
+            Color.WHITE, "화이트"
+    );
 
     static {
         pieceViews.putAll(BLACK_PIECE_VIEWS);
@@ -55,6 +59,7 @@ public class OutputView {
         System.out.println("> 게임 시작 : start");
         System.out.println("> 게임 종료 : end");
         System.out.println("> 게임 이동 : move source위치 target위치 - 예. move b2 b3");
+        System.out.println("> 점수 출력 : status");
     }
 
     public void printChessBoard(Map<Position, Piece> pieces) {
@@ -70,5 +75,18 @@ public class OutputView {
             Piece piece = pieces.get(new Position(file, rank));
             System.out.print(pieceViews.get(piece));
         }
+    }
+
+    public void printStatus(Map<Color, Double> status) {
+        status.forEach(this::printScore);
+        System.out.println();
+    }
+
+    private void printScore(Color color, Double score) {
+        System.out.println(String.format("%s팀의 점수는 %.1f점입니다.", COLOR_VIEW.get(color), score));
+    }
+
+    public void printGameResult(Color winnerColor) {
+        System.out.println(String.format("%s팀이 승리하였습니다.", COLOR_VIEW.get(winnerColor)));
     }
 }

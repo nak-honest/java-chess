@@ -4,7 +4,7 @@ import chess.domain.movement.Movements;
 import chess.domain.movement.MovementsFactory;
 import chess.domain.movement.UnitMovement;
 import chess.domain.position.Position;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 
 import java.util.List;
 import java.util.Map;
@@ -19,11 +19,11 @@ public class King extends Piece {
                     .collect(Collectors.toSet());
     private static final Movements COMMON_MOVEMENTS = new Movements(COMMON_UNIT_MOVEMENTS, COMMON_UNIT_MOVEMENTS);
     private static final Map<Color, King> KING_POOL = Map.of(
-            Color.BLACK, new King(Color.BLACK, COMMON_MOVEMENTS),
-            Color.WHITE, new King(Color.WHITE, COMMON_MOVEMENTS));
+            Color.BLACK, new King(Color.BLACK),
+            Color.WHITE, new King(Color.WHITE));
 
-    private King(Color color, Movements movements) {
-        super(color, movements);
+    private King(Color color) {
+        super(color);
     }
 
     public static King from(Color color) {
@@ -31,12 +31,12 @@ public class King extends Piece {
     }
 
     @Override
-    public List<Position> findPassPathTaken(TerminalPosition terminalPosition) {
-        return movements.findPassPathTaken(terminalPosition, MAX_MOVE_COUNT);
+    public List<Position> findPassPathTaken(StartEndPosition startEndPosition) {
+        return COMMON_MOVEMENTS.findPassPathTaken(startEndPosition, MAX_MOVE_COUNT);
     }
 
     @Override
-    public List<Position> findAttackPathTaken(TerminalPosition terminalPosition) {
-        return movements.findAttackPathTaken(terminalPosition, MAX_MOVE_COUNT);
+    public List<Position> findAttackPathTaken(StartEndPosition startEndPosition) {
+        return COMMON_MOVEMENTS.findAttackPathTaken(startEndPosition, MAX_MOVE_COUNT);
     }
 }

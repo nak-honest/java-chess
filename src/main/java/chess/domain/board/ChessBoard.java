@@ -3,9 +3,12 @@ package chess.domain.board;
 import chess.domain.piece.Color;
 import chess.domain.piece.Empty;
 import chess.domain.piece.Piece;
+import chess.domain.position.File;
 import chess.domain.position.Position;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.Rank;
+import chess.domain.position.StartEndPosition;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -18,72 +21,42 @@ public class ChessBoard {
         this.pieces = new HashMap<>(pieces);
     }
 
-    public Map<Position, Piece> getPieces() {
-        return Collections.unmodifiableMap(pieces);
-    }
-
-    public void move(TerminalPosition terminalPosition, Color currentTurn) {
-        validate(terminalPosition, currentTurn);
-        if (getPiece(terminalPosition.getEnd()) == Empty.getInstance()) {
-            passPiece(terminalPosition);
+    public void move(StartEndPosition startEndPosition, Color currentTurn) {
+        validate(startEndPosition, currentTurn);
+        if (getPiece(startEndPosition.getEnd()) == Empty.getInstance()) {
+            passPiece(startEndPosition);
             return;
         }
-        attackPiece(terminalPosition);
+        attackPiece(startEndPosition);
     }
 
-    private void validate(TerminalPosition terminalPosition, Color currentTurn) {
-        validateStartFriendly(terminalPosition.getStart(), currentTurn);
-        validateEndNotFriendly(terminalPosition.getEnd(), currentTurn);
+    private void validate(StartEndPosition startEndPosition, Color currentTurn) {
+        StartAndEndValidator validator = StartAndEndValidator.getInstance();
+        Piece startPiece = getPiece(startEndPosition.getStart());
+        Piece endPiece = getPiece(startEndPosition.getEnd());
+
+        validator.validate(startPiece, endPiece, currentTurn);
     }
 
-    private void validateStartFriendly(Position startPosition, Color friendlyColor) {
-        if (isEmpty(startPosition) || isEnemy(startPosition, friendlyColor)) {
-            throw new IllegalArgumentException("시작 위치에 아군 체스말이 존재해야 합니다.");
-        }
+    private void passPiece(StartEndPosition startEndPosition) {
+        Piece startPiece = getPiece(startEndPosition.getStart());
+        validateObstacle(startPiece.findPassPathTaken(startEndPosition));
+
+        exchange(startEndPosition, startPiece);
     }
 
-    private void validateEndNotFriendly(Position endPosition, Color currentTurn) {
-        if (isNotEmpty(endPosition) && isFriendly(endPosition, currentTurn)) {
-            throw new IllegalArgumentException("도착 위치에 아군 체스말이 존재할 수 없습니다.");
-        }
+    private void exchange(StartEndPosition startEndPosition, Piece startPiece) {
+        Piece temp = getPiece(startEndPosition.getEnd());
+        putPiece(startEndPosition.getEnd(), startPiece);
+        putPiece(startEndPosition.getStart(), temp);
     }
 
-    private boolean isEmpty(Position position) {
-        return getPiece(position) == Empty.getInstance();
-    }
+    private void attackPiece(StartEndPosition startEndPosition) {
+        Piece startPiece = getPiece(startEndPosition.getStart());
+        validateObstacle(startPiece.findAttackPathTaken(startEndPosition));
 
-    private boolean isNotEmpty(Position position) {
-        return !isEmpty(position);
-    }
-
-    private boolean isFriendly(Position position, Color friendlyColor) {
-        Piece startPiece = getPiece(position);
-        return startPiece.isColor(friendlyColor);
-    }
-
-    private boolean isEnemy(Position position, Color friendlyColor) {
-        return !isFriendly(position, friendlyColor);
-    }
-
-    private void passPiece(TerminalPosition terminalPosition) {
-        Piece startPiece = getPiece(terminalPosition.getStart());
-        validateObstacle(startPiece.findPassPathTaken(terminalPosition));
-
-        exchange(terminalPosition, startPiece);
-    }
-
-    private void exchange(TerminalPosition terminalPosition, Piece startPiece) {
-        Piece temp = getPiece(terminalPosition.getEnd());
-        putPiece(terminalPosition.getEnd(), startPiece);
-        putPiece(terminalPosition.getStart(), temp);
-    }
-
-    private void attackPiece(TerminalPosition terminalPosition) {
-        Piece startPiece = getPiece(terminalPosition.getStart());
-        validateObstacle(startPiece.findAttackPathTaken(terminalPosition));
-
-        putPiece(terminalPosition.getEnd(), startPiece);
-        putPiece(terminalPosition.getStart(), Empty.getInstance());
+        putPiece(startEndPosition.getEnd(), startPiece);
+        putPiece(startEndPosition.getStart(), Empty.getInstance());
     }
 
     private void validateObstacle(List<Position> pathTaken) {
@@ -97,6 +70,10 @@ public class ChessBoard {
                 .anyMatch(this::isNotEmpty);
     }
 
+    private boolean isNotEmpty(Position position) {
+        return getPiece(position) != Empty.getInstance();
+    }
+
     private Piece getPiece(Position position) {
         return pieces.get(position);
     }
@@ -105,10 +82,27 @@ public class ChessBoard {
         pieces.put(position, piece);
     }
 
+    public int countPiece(Piece counted) {
+        return (int) pieces.values().stream()
+                .filter(piece -> piece.equals(counted))
+                .count();
+    }
+
+    public int countPieceAtFile(Piece counted, File file) {
+        return (int) Arrays.stream(Rank.values())
+                .map(rank -> new Position(file, rank))
+                .filter(position -> counted.equals(pieces.get(position)))
+                .count();
+    }
+
     @Override
     public String toString() {
         return "ChessBoard{" +
                 "pieces=" + pieces +
                 '}';
+    }
+
+    public Map<Position, Piece> getPieces() {
+        return Collections.unmodifiableMap(pieces);
     }
 }

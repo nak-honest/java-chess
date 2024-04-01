@@ -4,7 +4,7 @@ import chess.domain.movement.Movements;
 import chess.domain.movement.MovementsFactory;
 import chess.domain.movement.UnitMovement;
 import chess.domain.position.Position;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 
 import java.util.List;
 import java.util.Map;
@@ -15,11 +15,11 @@ public class Knight extends Piece {
     private static final Set<UnitMovement> COMMON_UNIT_MOVEMENTS = MovementsFactory.createKnightMovements();
     private static final Movements COMMON_MOVEMENTS = new Movements(COMMON_UNIT_MOVEMENTS, COMMON_UNIT_MOVEMENTS);
     private static final Map<Color, Knight> KNIGHT_POOL = Map.of(
-            Color.BLACK, new Knight(Color.BLACK, COMMON_MOVEMENTS),
-            Color.WHITE, new Knight(Color.WHITE, COMMON_MOVEMENTS));
+            Color.BLACK, new Knight(Color.BLACK),
+            Color.WHITE, new Knight(Color.WHITE));
 
-    private Knight(Color color, Movements movements) {
-        super(color, movements);
+    private Knight(Color color) {
+        super(color);
     }
 
     public static Knight from(Color color) {
@@ -27,12 +27,12 @@ public class Knight extends Piece {
     }
 
     @Override
-    public List<Position> findPassPathTaken(TerminalPosition terminalPosition) {
-        return movements.findPassPathTaken(terminalPosition, MAX_MOVE_COUNT);
+    public List<Position> findPassPathTaken(StartEndPosition startEndPosition) {
+        return COMMON_MOVEMENTS.findPassPathTaken(startEndPosition, MAX_MOVE_COUNT);
     }
 
     @Override
-    public List<Position> findAttackPathTaken(TerminalPosition terminalPosition) {
-        return movements.findAttackPathTaken(terminalPosition, MAX_MOVE_COUNT);
+    public List<Position> findAttackPathTaken(StartEndPosition startEndPosition) {
+        return COMMON_MOVEMENTS.findAttackPathTaken(startEndPosition, MAX_MOVE_COUNT);
     }
 }

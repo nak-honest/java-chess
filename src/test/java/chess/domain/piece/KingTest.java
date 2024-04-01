@@ -3,7 +3,7 @@ package chess.domain.piece;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,11 +22,11 @@ class KingTest {
         void canStraightMoveTest() {
             // given
             Piece piece = King.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.SECOND));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.SECOND));
 
             // when & then
-            assertThat(piece.findPassPathTaken(terminalPosition))
+            assertThat(piece.findPassPathTaken(startEndPosition))
                     .isEqualTo(List.of());
         }
 
@@ -35,11 +35,11 @@ class KingTest {
         void canDiagonalMoveTest() {
             // given
             Piece piece = King.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.B, Rank.SECOND));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.B, Rank.SECOND));
 
             // when & then
-            assertThat(piece.findPassPathTaken(terminalPosition))
+            assertThat(piece.findPassPathTaken(startEndPosition))
                     .isEqualTo(List.of());
         }
 
@@ -48,11 +48,11 @@ class KingTest {
         void canNotMoveTest() {
             // given
             Piece piece = King.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.THIRD));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.THIRD));
 
             // when & then
-            assertThatThrownBy(() -> piece.findPassPathTaken(terminalPosition))
+            assertThatThrownBy(() -> piece.findPassPathTaken(startEndPosition))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("도착 위치는 체스 말이 도달할 수 없는 위치입니다.");
         }
@@ -66,11 +66,11 @@ class KingTest {
         void canStraightAttackTest() {
             // given
             Piece attackerPiece = King.from(Color.WHITE);
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.SECOND));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.SECOND));
 
             // when & then
-            assertThat(attackerPiece.findAttackPathTaken(terminalPosition))
+            assertThat(attackerPiece.findAttackPathTaken(startEndPosition))
                     .isEqualTo(List.of());
         }
 
@@ -80,11 +80,11 @@ class KingTest {
             // given
             Piece attackerPiece = King.from(Color.WHITE);
 
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.B, Rank.SECOND));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.B, Rank.SECOND));
 
             // when & then
-            assertThat(attackerPiece.findAttackPathTaken(terminalPosition))
+            assertThat(attackerPiece.findAttackPathTaken(startEndPosition))
                     .isEqualTo(List.of());
         }
 
@@ -94,11 +94,11 @@ class KingTest {
             // given
             Piece attackerPiece = King.from(Color.WHITE);
 
-            TerminalPosition terminalPosition =
-                    new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.THIRD));
+            StartEndPosition startEndPosition =
+                    new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.THIRD));
 
             // when & then
-            assertThatThrownBy(() -> attackerPiece.findAttackPathTaken(terminalPosition))
+            assertThatThrownBy(() -> attackerPiece.findAttackPathTaken(startEndPosition))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("도착 위치는 체스 말이 도달할 수 없는 위치입니다.");
         }

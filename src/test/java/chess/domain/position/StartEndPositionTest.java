@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class TerminalPositionTest {
+class StartEndPositionTest {
     @DisplayName("출발점과 도착점이 같은 경우 예외를 발생시킨다.")
     @Test
     void sameStartAndEndPointExceptionTest() {
         assertThatThrownBy(() ->
-                new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.FIRST)))
+                new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.FIRST)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("시작점과 끝점은 같을 수 없습니다.");
     }
@@ -20,7 +20,7 @@ class TerminalPositionTest {
     @Test
     void sameStartAndEndPointNotExceptionTest() {
         assertThatCode(() ->
-                new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.SECOND)))
+                new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.SECOND)))
                 .doesNotThrowAnyException();
     }
 }

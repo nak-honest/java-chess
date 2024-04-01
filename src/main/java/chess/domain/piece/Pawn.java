@@ -4,7 +4,7 @@ import chess.domain.movement.Movements;
 import chess.domain.movement.UnitMovement;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 
 import java.util.List;
 import java.util.Map;
@@ -22,13 +22,15 @@ public class Pawn extends Piece {
     private static final Movements WHITE_MOVEMENTS = new Movements(
             Set.of(UnitMovement.UP),
             Set.of(UnitMovement.LEFT_UP, UnitMovement.RIGHT_UP));
-
+    private static final Map<Color, Movements> COLOR_MOVEMENTS = Map.of(
+            Color.BLACK, BLACK_MOVEMENTS,
+            Color.WHITE, WHITE_MOVEMENTS);
     private static final Map<Color, Pawn> PAWN_POOL = Map.of(
-            Color.BLACK, new Pawn(Color.BLACK, BLACK_MOVEMENTS),
-            Color.WHITE, new Pawn(Color.WHITE, WHITE_MOVEMENTS));
+            Color.BLACK, new Pawn(Color.BLACK),
+            Color.WHITE, new Pawn(Color.WHITE));
 
-    private Pawn(Color color, Movements movements) {
-        super(color, movements);
+    private Pawn(Color color) {
+        super(color);
     }
 
     public static Pawn from(Color color) {
@@ -36,12 +38,12 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Position> findPassPathTaken(TerminalPosition terminalPosition) {
-        return movements.findPassPathTaken(terminalPosition, maxPassMoveCount(terminalPosition));
+    public List<Position> findPassPathTaken(StartEndPosition startEndPosition) {
+        return movements().findPassPathTaken(startEndPosition, maxPassMoveCount(startEndPosition));
     }
 
-    protected int maxPassMoveCount(TerminalPosition terminalPosition) {
-        Position startPosition = terminalPosition.getStart();
+    protected int maxPassMoveCount(StartEndPosition startEndPosition) {
+        Position startPosition = startEndPosition.getStart();
 
         if (isBlackInitRank(startPosition) || isWhiteInitRank(startPosition)) {
             return MAX_INIT_PASS_COUNT;
@@ -59,7 +61,11 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Position> findAttackPathTaken(TerminalPosition terminalPosition) {
-        return movements.findAttackPathTaken(terminalPosition, MAX_ATTACK_MOVE_COUNT);
+    public List<Position> findAttackPathTaken(StartEndPosition startEndPosition) {
+        return movements().findAttackPathTaken(startEndPosition, MAX_ATTACK_MOVE_COUNT);
+    }
+
+    private Movements movements() {
+        return COLOR_MOVEMENTS.get(getColor());
     }
 }

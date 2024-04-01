@@ -1,14 +1,19 @@
 package chess.controller;
 
-import chess.command.Command;
+import chess.command.CommandType;
 import chess.domain.game.ChessGame;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 import chess.util.ExceptionRetryHandler;
 import chess.view.InputView;
 import chess.view.OutputView;
-import chess.view.TerminalPositionView;
+import chess.view.StartEndPositionView;
+
+import java.util.Map;
+import java.util.function.Consumer;
 
 public class ChessController {
+    private static final int MOVE_ARGUMENTS_COUNT = 2;
+
     private final InputView inputView;
     private final OutputView outputView;
 
@@ -19,28 +24,7 @@ public class ChessController {
 
     public void run() {
         outputView.printStartMessage();
-        Command command = receiveStartCommandUntilValid();
-        validateStartOrEnd(command);
-
-        if (command.isStart()) {
-            startGame();
-        }
-    }
-
-    private Command receiveStartCommandUntilValid() {
-        return ExceptionRetryHandler.handle(inputView::readCommand);
-    }
-
-    private static void validateStartOrEnd(Command command) {
-        if (command.isNotStartOrEnd()) {
-            throw new IllegalArgumentException("게임을 시작하거나 끝내는 것만 가능합니다.");
-        }
-    }
-
-    private void startGame() {
-        ChessGame chessGame = ChessGame.createOnStart();
-        outputView.printChessBoard(chessGame.getPieces());
-
+        ChessGame chessGame = ChessGame.create();
         processGameUntilValid(chessGame);
     }
 
@@ -49,31 +33,47 @@ public class ChessController {
     }
 
     private void processGame(ChessGame chessGame) {
-        Command command = receiveProcessCommand();
+        Map<CommandType, Consumer<ChessGame>> commandInvoker = createCommandInvoker();
+        CommandType commandType = inputView.readCommand();
+        commandInvoker.get(commandType).accept(chessGame);
+    }
 
-        while (command.isNotEnd()) {
-            processTurn(command, chessGame);
-            command = receiveProcessCommand();
+    private Map<CommandType, Consumer<ChessGame>> createCommandInvoker() {
+        return Map.of(
+                CommandType.START, this::startGame,
+                CommandType.MOVE, this::move,
+                CommandType.STATUS, this::status,
+                CommandType.END, this::endGame
+        );
+    }
+
+    private void startGame(ChessGame chessGame) {
+        chessGame.startGame();
+        outputView.printChessBoard(chessGame.getPieces());
+
+        while (!chessGame.isNotProcess()) {
+            processGameUntilValid(chessGame);
+        }
+        printGameResult(chessGame);
+    }
+
+    private void printGameResult(ChessGame chessGame) {
+        if (chessGame.isKingDead()) {
+            outputView.printGameResult(chessGame.winnerColor());
         }
     }
 
-    private Command receiveProcessCommand() {
-        Command command = inputView.readCommand();
-        validateNotStart(command);
-        return command;
+    private void move(ChessGame chessGame) {
+        StartEndPosition startEndPosition = StartEndPositionView.of(inputView.readArguments(MOVE_ARGUMENTS_COUNT));
+        chessGame.movePiece(startEndPosition);
+        outputView.printChessBoard(chessGame.getPieces());
     }
 
-    private void validateNotStart(Command command) {
-        if (command.isStart()) {
-            throw new IllegalArgumentException("게임이 이미 진행중입니다.");
-        }
+    private void status(ChessGame chessGame) {
+        outputView.printStatus(chessGame.status());
     }
 
-    private void processTurn(Command command, ChessGame chessGame) {
-        if (command.isMove()) {
-            TerminalPosition terminalPosition = TerminalPositionView.of(command.getArguments());
-            chessGame.movePiece(terminalPosition);
-            outputView.printChessBoard(chessGame.getPieces());
-        }
+    private void endGame(ChessGame chessGame) {
+        chessGame.endGame();
     }
 }

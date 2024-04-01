@@ -1,7 +1,7 @@
 package chess.domain.movement;
 
 import chess.domain.position.Position;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,27 +18,27 @@ public class Movements {
         this.attackMovements = new HashSet<>(attackMovements);
     }
 
-    public List<Position> findPassPathTaken(TerminalPosition terminalPosition, int maxMoveCount) {
+    public List<Position> findPassPathTaken(StartEndPosition startEndPosition, int maxMoveCount) {
         UnitMovement arriveMovement = passMovements.stream()
-                .filter(unitMovement -> canArrive(terminalPosition, unitMovement, maxMoveCount))
+                .filter(unitMovement -> canArrive(startEndPosition, unitMovement, maxMoveCount))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("도착 위치는 체스 말이 도달할 수 없는 위치입니다."));
 
-        return findPathTaken(terminalPosition, arriveMovement);
+        return findPathTaken(startEndPosition, arriveMovement);
     }
 
-    public List<Position> findAttackPathTaken(TerminalPosition terminalPosition, int maxMoveCount) {
+    public List<Position> findAttackPathTaken(StartEndPosition startEndPosition, int maxMoveCount) {
         UnitMovement arriveMovement = attackMovements.stream()
-                .filter(unitMovement -> canArrive(terminalPosition, unitMovement, maxMoveCount))
+                .filter(unitMovement -> canArrive(startEndPosition, unitMovement, maxMoveCount))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("도착 위치는 체스 말이 도달할 수 없는 위치입니다."));
 
-        return findPathTaken(terminalPosition, arriveMovement);
+        return findPathTaken(startEndPosition, arriveMovement);
     }
 
-    private boolean canArrive(TerminalPosition terminalPosition, UnitMovement unitMovement, int maxMoveCount) {
-        Position startPosition = terminalPosition.getStart();
-        Position endPosition = terminalPosition.getEnd();
+    private boolean canArrive(StartEndPosition startEndPosition, UnitMovement unitMovement, int maxMoveCount) {
+        Position startPosition = startEndPosition.getStart();
+        Position endPosition = startEndPosition.getEnd();
 
         return Stream.iterate(startPosition, position -> position.move(unitMovement))
                 .limit(maxMoveCount)
@@ -50,12 +50,12 @@ public class Movements {
         return position.move(unitMovement);
     }
 
-    private List<Position> findPathTaken(TerminalPosition terminalPosition, UnitMovement unitMovement) {
+    private List<Position> findPathTaken(StartEndPosition startEndPosition, UnitMovement unitMovement) {
         ArrayList<Position> pathTaken = new ArrayList<>();
-        Position current = terminalPosition.getStart();
+        Position current = startEndPosition.getStart();
         current = current.move(unitMovement);
 
-        while (!current.equals(terminalPosition.getEnd())) {
+        while (!current.equals(startEndPosition.getEnd())) {
             pathTaken.add(current);
             current = current.move(unitMovement);
         }

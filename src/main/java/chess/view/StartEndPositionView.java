@@ -1,12 +1,12 @@
 package chess.view;
 
 import chess.domain.position.Position;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 
 import java.util.List;
 
-public class TerminalPositionView {
-    private TerminalPositionView() {
+public class StartEndPositionView {
+    private StartEndPositionView() {
     }
 
     private static final int START_POSITION_INDEX = 0;
@@ -19,12 +19,12 @@ public class TerminalPositionView {
             (FILE_END_INDEX - FILE_BEGIN_INDEX) + (RANK_END_INDEX - RANK_BEGIN_INDEX);
     private static final int ARGUMENTS_SIZE = 2;
 
-    public static TerminalPosition of(List<String> arguments) {
+    public static StartEndPosition of(List<String> arguments) {
         validate(arguments);
         Position start = toStartPosition(arguments.get(START_POSITION_INDEX));
         Position end = toEndPosition(arguments.get(END_POSITION_INDEX));
 
-        return new TerminalPosition(start, end);
+        return new StartEndPosition(start, end);
     }
 
     private static void validate(List<String> arguments) {

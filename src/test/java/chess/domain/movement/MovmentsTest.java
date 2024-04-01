@@ -3,7 +3,7 @@ package chess.domain.movement;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
-import chess.domain.position.TerminalPosition;
+import chess.domain.position.StartEndPosition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,12 +18,12 @@ public class MovmentsTest {
     @Test
     void findPassPathTest() {
         // given
-        TerminalPosition terminalPosition =
-                new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.THIRD));
+        StartEndPosition startEndPosition =
+                new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.THIRD));
         Movements movements = new Movements(Set.of(UnitMovement.UP), Set.of());
 
         // when & then
-        assertThat(movements.findPassPathTaken(terminalPosition, 2))
+        assertThat(movements.findPassPathTaken(startEndPosition, 2))
                 .isEqualTo(List.of(new Position(File.A, Rank.SECOND)));
     }
 
@@ -31,12 +31,12 @@ public class MovmentsTest {
     @Test
     void findAttackPathTest() {
         // given
-        TerminalPosition terminalPosition =
-                new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.C, Rank.THIRD));
+        StartEndPosition startEndPosition =
+                new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.C, Rank.THIRD));
         Movements movements = new Movements(Set.of(), Set.of(UnitMovement.RIGHT_UP));
 
         // when & then
-        assertThat(movements.findAttackPathTaken(terminalPosition, 2))
+        assertThat(movements.findAttackPathTaken(startEndPosition, 2))
                 .isEqualTo(List.of(new Position(File.B, Rank.SECOND)));
     }
 
@@ -44,12 +44,12 @@ public class MovmentsTest {
     @Test
     void canNotArriveTest() {
         // given
-        TerminalPosition terminalPosition =
-                new TerminalPosition(new Position(File.H, Rank.EIGHTH), new Position(File.D, Rank.THIRD));
+        StartEndPosition startEndPosition =
+                new StartEndPosition(new Position(File.H, Rank.EIGHTH), new Position(File.D, Rank.THIRD));
         Movements movements = new Movements(Set.of(), Set.of(UnitMovement.RIGHT));
 
         // when & then
-        assertThatThrownBy(() -> movements.findAttackPathTaken(terminalPosition, 8))
+        assertThatThrownBy(() -> movements.findAttackPathTaken(startEndPosition, 8))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("도착 위치는 체스 말이 도달할 수 없는 위치입니다.");
     }
@@ -58,12 +58,12 @@ public class MovmentsTest {
     @Test
     void shortMovementTest() {
         // given
-        TerminalPosition terminalPosition =
-                new TerminalPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.THIRD));
+        StartEndPosition startEndPosition =
+                new StartEndPosition(new Position(File.A, Rank.FIRST), new Position(File.A, Rank.THIRD));
         Movements movements = new Movements(Set.of(), Set.of(UnitMovement.UP));
 
         // when & then
-        assertThatThrownBy(() -> movements.findAttackPathTaken(terminalPosition, 1))
+        assertThatThrownBy(() -> movements.findAttackPathTaken(startEndPosition, 1))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("도착 위치는 체스 말이 도달할 수 없는 위치입니다.");
     }
