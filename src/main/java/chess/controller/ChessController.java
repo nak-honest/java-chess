@@ -3,6 +3,7 @@ package chess.controller;
 import chess.command.CommandType;
 import chess.domain.game.ChessGame;
 import chess.domain.position.StartEndPosition;
+import chess.service.GameService;
 import chess.util.ExceptionRetryHandler;
 import chess.view.InputView;
 import chess.view.OutputView;
@@ -14,10 +15,12 @@ import java.util.function.Consumer;
 public class ChessController {
     private static final int MOVE_ARGUMENTS_COUNT = 2;
 
+    private final GameService gameService;
     private final InputView inputView;
     private final OutputView outputView;
 
-    public ChessController(InputView inputView, OutputView outputView) {
+    public ChessController(GameService gameService, InputView inputView, OutputView outputView) {
+        this.gameService = gameService;
         this.inputView = inputView;
         this.outputView = outputView;
     }
@@ -74,6 +77,7 @@ public class ChessController {
     }
 
     private void endGame(ChessGame chessGame) {
+        gameService.saveGame(chessGame);
         chessGame.endGame();
     }
 }

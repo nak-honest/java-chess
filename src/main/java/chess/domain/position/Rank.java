@@ -33,4 +33,8 @@ public enum Rank {
     public Rank move(int diff) {
         return Rank.from(value + diff);
     }
+
+    public int getValue() {
+        return value;
+    }
 }

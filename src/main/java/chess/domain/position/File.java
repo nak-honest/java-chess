@@ -33,4 +33,8 @@ public enum File {
     public File move(int diff) {
         return File.from(value + diff);
     }
+
+    public int getValue() {
+        return value;
+    }
 }

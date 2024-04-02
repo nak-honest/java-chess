@@ -17,12 +17,31 @@ public class Turn {
         return new Turn(List.of(Color.WHITE, Color.BLACK));
     }
 
+    public static Turn from(List<Color> colors) {
+        return new Turn(colors);
+    }
+
     public void process() {
         Collections.rotate(turns, -1);
     }
 
     public Color getCurrentTurn() {
         return turns.get(0);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Turn turn = (Turn) o;
+
+        return turns.equals(turn.turns);
+    }
+
+    @Override
+    public int hashCode() {
+        return turns.hashCode();
     }
 
     @Override

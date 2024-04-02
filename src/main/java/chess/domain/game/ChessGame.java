@@ -77,4 +77,8 @@ public class ChessGame {
     public Map<Position, Piece> getPieces() {
         return board.getPieces();
     }
+
+    public State getState() {
+        return state;
+    }
 }
