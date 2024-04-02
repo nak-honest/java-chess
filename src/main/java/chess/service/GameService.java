@@ -8,44 +8,49 @@ import chess.entity.GameEntity;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.function.Consumer;
 
 public class GameService {
 
     public void saveGame(ChessGame chessGame) {
-        try {
-            Connection connection = JdbcConnection.getConnection();
-            connection.setAutoCommit(false);
-            GameDao gameDao = new GameDao(connection);
-            BoardDao boardDao = new BoardDao(connection);
-            int gameId = gameDao.save(chessGame.currentTurn());
-            boardDao.save(gameId, chessGame.getPieces());
-            connection.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        startTransaction(connection -> saveGame(chessGame, connection));
+    }
+
+    public void saveGame(ChessGame chessGame, Connection connection) {
+        GameDao gameDao = new GameDao(connection);
+        BoardDao boardDao = new BoardDao(connection);
+        int gameId = gameDao.save(chessGame.currentTurn());
+        boardDao.save(gameId, chessGame.getPieces());
     }
 
     public void loadRecentGame(ChessGame chessGame) {
-        try {
-            Connection connection = JdbcConnection.getConnection();
-            connection.setAutoCommit(true);
-            GameDao gameDao = new GameDao(connection);
-            BoardDao boardDao = new BoardDao(connection);
-            GameEntity gameEntity = gameDao.findRecentGame().orElseThrow(() -> new IllegalArgumentException("최근 게임 내역이 없습니다."));
-            chessGame.loadGame(gameEntity.currentTurn(), boardDao.findByGameId(gameEntity.id()));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        startTransaction(connection -> loadRecentGame(chessGame, connection));
+    }
+
+    private void loadRecentGame(ChessGame chessGame, Connection connection) {
+        GameDao gameDao = new GameDao(connection);
+        BoardDao boardDao = new BoardDao(connection);
+        GameEntity gameEntity = gameDao.findRecentGame()
+                .orElseThrow(() -> new IllegalArgumentException("최근 게임 내역이 없습니다."));
+        chessGame.loadGame(gameEntity.currentTurn(), boardDao.findByGameId(gameEntity.id()));
     }
 
     public void deleteAllSave() {
+        startTransaction(connection -> deleteAllSave(connection));
+    }
+
+    private void deleteAllSave(Connection connection) {
+        GameDao gameDao = new GameDao(connection);
+        BoardDao boardDao = new BoardDao(connection);
+        boardDao.deleteAll();
+        gameDao.deleteAll();
+    }
+
+    private void startTransaction(Consumer<Connection> consumer) {
         try {
             Connection connection = JdbcConnection.getConnection();
             connection.setAutoCommit(false);
-            GameDao gameDao = new GameDao(connection);
-            BoardDao boardDao = new BoardDao(connection);
-            boardDao.deleteAll();
-            gameDao.deleteAll();
+            consumer.accept(connection);
             connection.commit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
