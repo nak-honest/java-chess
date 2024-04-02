@@ -17,8 +17,8 @@ public class Turn {
         return new Turn(List.of(Color.WHITE, Color.BLACK));
     }
 
-    public static Turn from(List<Color> colors) {
-        return new Turn(colors);
+    public static Turn from(Color currentTurn) {
+        return new Turn(List.of(currentTurn, currentTurn.opposite()));
     }
 
     public void process() {

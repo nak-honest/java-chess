@@ -4,9 +4,11 @@ import chess.domain.board.ChessBoard;
 import chess.domain.game.Turn;
 import chess.domain.piece.Color;
 import chess.domain.piece.King;
+import chess.domain.piece.Piece;
+import chess.domain.position.Position;
 import chess.domain.position.StartEndPosition;
 
-import java.util.Objects;
+import java.util.Map;
 
 public class ProcessState implements State {
     private final Turn turn;
@@ -19,12 +21,17 @@ public class ProcessState implements State {
         return new ProcessState(Turn.createOnStart());
     }
 
-    public static ProcessState from(Turn turn) {
-        return new ProcessState(turn);
+    public static ProcessState from(Color currentTurn) {
+        return new ProcessState(Turn.from(currentTurn));
     }
 
     @Override
     public State start() {
+        throw new IllegalArgumentException("게임이 이미 시작되었습니다.");
+    }
+
+    @Override
+    public State load(Color currentTurn, ChessBoard board, Map<Position, Piece> loadedBoard) {
         throw new IllegalArgumentException("게임이 이미 시작되었습니다.");
     }
 
@@ -54,17 +61,14 @@ public class ProcessState implements State {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ProcessState that = (ProcessState) o;
-
-        return Objects.equals(turn, that.turn);
+    public String toString() {
+        return "ProcessState{" +
+                "turn=" + turn +
+                '}';
     }
 
     @Override
-    public int hashCode() {
-        return turn != null ? turn.hashCode() : 0;
+    public Color getCurrentTurn() {
+        return turn.getCurrentTurn();
     }
 }

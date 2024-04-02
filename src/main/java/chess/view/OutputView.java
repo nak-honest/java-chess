@@ -56,8 +56,9 @@ public class OutputView {
 
     public void printStartMessage() {
         System.out.println("> 체스 게임을 시작합니다.");
-        System.out.println("> 게임 시작 : start");
-        System.out.println("> 게임 종료 : end");
+        System.out.println("> 새 게임 시작(이전 게임 삭제) : start");
+        System.out.println("> 이전 게임 불러오기 : load");
+        System.out.println("> 게임 종료(게임 저장) : end");
         System.out.println("> 게임 이동 : move source위치 target위치 - 예. move b2 b3");
         System.out.println("> 점수 출력 : status");
     }

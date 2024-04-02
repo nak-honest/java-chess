@@ -1,5 +1,5 @@
 package chess.command;
 
 public enum CommandType {
-    START, END, MOVE, STATUS;
+    START, LOAD, END, MOVE, STATUS;
 }

@@ -12,6 +12,7 @@ public class InputView {
     private static final InputView INSTANCE = new InputView(new Scanner(System.in));
     private static final Map<String, CommandType> COMMANDS = Map.of(
             "start", CommandType.START,
+            "load", CommandType.LOAD,
             "end", CommandType.END,
             "move", CommandType.MOVE,
             "status", CommandType.STATUS

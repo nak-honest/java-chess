@@ -46,10 +46,10 @@ public class BoardDao {
                 .collect(Collectors.toSet());
     }
 
-    public Map<Position, Piece> findRecentBoard() {
-        final var query = "SELECT b.* FROM board b " +
-                "JOIN (SELECT id FROM game ORDER BY saved_at DESC LIMIT 1) g ON b.game_id = g.id;";
+    public Map<Position, Piece> findByGameId(int gameId) {
+        final var query = "SELECT * FROM board WHERE game_id = ?";
         try (final var statement = connection.prepareStatement(query)) {
+            statement.setInt(1, gameId);
             Map<Position, Piece> board = createEmptyBoard();
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -83,5 +83,14 @@ public class BoardDao {
         }
 
         return pieces;
+    }
+
+    public void deleteAll() {
+        final var query = "DELETE FROM board;";
+        try (final var statement = connection.prepareStatement(query)) {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

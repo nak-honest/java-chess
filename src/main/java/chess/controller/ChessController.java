@@ -44,6 +44,7 @@ public class ChessController {
     private Map<CommandType, Consumer<ChessGame>> createCommandInvoker() {
         return Map.of(
                 CommandType.START, this::startGame,
+                CommandType.LOAD, this::loadGame,
                 CommandType.MOVE, this::move,
                 CommandType.STATUS, this::status,
                 CommandType.END, this::endGame
@@ -52,16 +53,26 @@ public class ChessController {
 
     private void startGame(ChessGame chessGame) {
         chessGame.startGame();
+        gameService.deleteAllSave();
         outputView.printChessBoard(chessGame.getPieces());
 
-        while (!chessGame.isNotProcess()) {
-            processGameUntilValid(chessGame);
-        }
-        printGameResult(chessGame);
+        processGameUntilEnd(chessGame);
     }
 
-    private void printGameResult(ChessGame chessGame) {
+    private void loadGame(ChessGame chessGame) {
+        gameService.loadRecentGame(chessGame);
+        outputView.printChessBoard(chessGame.getPieces());
+
+        processGameUntilEnd(chessGame);
+    }
+
+    private void processGameUntilEnd(ChessGame chessGame) {
+        while (chessGame.isProcess()) {
+            processGameUntilValid(chessGame);
+        }
+
         if (chessGame.isKingDead()) {
+            gameService.deleteAllSave();
             outputView.printGameResult(chessGame.winnerColor());
         }
     }

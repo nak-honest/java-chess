@@ -21,6 +21,10 @@ public class ChessBoard {
         this.pieces = new HashMap<>(pieces);
     }
 
+    public void loadBoard(Map<Position, Piece> loadedBoard) {
+        pieces.putAll(loadedBoard);
+    }
+
     public void move(StartEndPosition startEndPosition, Color currentTurn) {
         validate(startEndPosition, currentTurn);
         if (getPiece(startEndPosition.getEnd()) == Empty.getInstance()) {

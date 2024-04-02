@@ -3,8 +3,6 @@ package chess.dao;
 import chess.db.JdbcConnection;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.PiecePositions;
-import chess.domain.game.Turn;
-import chess.domain.game.state.ProcessState;
 import chess.domain.piece.Color;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -50,14 +47,14 @@ public class BoardDaoTest {
     @Test
     void saveEndStateTest() {
         // given
-        int gameId = gameDao.save(ProcessState.from(Turn.from(List.of(Color.WHITE, Color.BLACK)))).get();
+        int gameId = gameDao.save(Color.WHITE);
         ChessBoard chessBoard = PiecePositions.createBoard();
 
         // when
         boardDao.save(gameId, chessBoard.getPieces());
 
         // then
-        assertThat(boardDao.findRecentBoard())
+        assertThat(boardDao.findByGameId(gameId))
                 .isEqualTo(chessBoard.getPieces());
     }
 
@@ -65,12 +62,12 @@ public class BoardDaoTest {
     @Test
     void findRecentTest() {
         // given
-        int gameId = gameDao.save(ProcessState.from(Turn.from(List.of(Color.WHITE, Color.BLACK)))).get();
+        int gameId = gameDao.save(Color.WHITE);
         ChessBoard chessBoard = PiecePositions.createBoard();
         boardDao.save(gameId, chessBoard.getPieces());
 
         // when & then
-        assertThat(boardDao.findRecentBoard())
+        assertThat(boardDao.findByGameId(gameId))
                 .isEqualTo(chessBoard.getPieces());
     }
 }
