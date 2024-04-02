@@ -47,11 +47,39 @@ public class GameService {
     }
 
     private void startTransaction(Consumer<Connection> consumer) {
+        Connection connection = null;
         try {
-            Connection connection = JdbcConnection.getConnection();
+            connection = JdbcConnection.getConnection();
             connection.setAutoCommit(false);
             consumer.accept(connection);
             connection.commit();
+        } catch (Exception e) {
+            rollBack(connection);
+            throw new RuntimeException(e);
+        } finally {
+            close(connection);
+        }
+    }
+
+    private void rollBack(Connection connection) {
+        if (connection == null) {
+            return;
+        }
+
+        try {
+            connection.rollback();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void close(Connection connection) {
+        if (connection == null) {
+            return;
+        }
+
+        try {
+            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
