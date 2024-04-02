@@ -1,5 +1,26 @@
 # 체스 게임
 
+## 실행 방법
+
+도커를 올려야만 게임을 저장/로드 할 수 있습니다.
+
+### 도커 올리기
+
+도커 데몬을 먼저 실행한다.
+그 후 docker-compose.yml이 있는 docker 디렉토리로 가서 다음 명령어를 실행한다.
+
+```shell
+docker-compose -p chess up -d
+```
+
+### 도커 내리기
+
+docker-compose.yml이 있는 docker 디렉토리로 가서 다음 명령어를 실행한다.
+
+```shell
+docker-compose -p chess down
+```
+
 ## 기능 목록
 
 ### 도메인 기능
