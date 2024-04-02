@@ -35,4 +35,12 @@ public enum PieceTypeMapper {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 PieceTypeMapper입니다."));
     }
+
+    public static Piece findPiece(String name, Color color) {
+        return Arrays.stream(values())
+                .filter(pieceTypeMapper -> name.equals(pieceTypeMapper.name()))
+                .map(pieceTypeMapper -> pieceTypeMapper.pieceCreator.apply(color))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Piece입니다."));
+    }
 }

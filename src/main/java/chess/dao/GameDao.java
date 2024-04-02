@@ -30,4 +30,18 @@ public class GameDao {
             throw new RuntimeException(e);
         }
     }
+
+    public Optional<State> findRecent() {
+        final var query = "SELECT game_turn FROM game ORDER BY saved_at DESC LIMIT 1;";
+        try (final var statement = connection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                State state = TurnMapper.findState(resultSet.getString("game_turn"));
+                return Optional.of(state);
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

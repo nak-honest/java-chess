@@ -32,4 +32,12 @@ public enum TurnMapper {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("진행중인 게임만 턴을 가지고 있습니다."));
     }
+
+    public static State findState(String name) {
+        return Arrays.stream(values())
+                .filter(turnMapper -> name.equals(turnMapper.name()))
+                .map(turnMapper -> turnMapper.stateCreator.get())
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 State입니다."));
+    }
 }
