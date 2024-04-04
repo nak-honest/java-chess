@@ -6,6 +6,7 @@ import chess.domain.piece.Piece;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
+import chess.exception.DataAccessException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -36,7 +37,7 @@ public class BoardDao {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e);
         }
     }
 
@@ -62,7 +63,7 @@ public class BoardDao {
             }
             return board;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e);
         }
     }
 
@@ -90,7 +91,7 @@ public class BoardDao {
         try (final var statement = connection.prepareStatement(query)) {
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e);
         }
     }
 }

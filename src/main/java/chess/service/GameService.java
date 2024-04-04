@@ -33,7 +33,7 @@ public class GameService {
         GameDao gameDao = new GameDao(connection);
         BoardDao boardDao = new BoardDao(connection);
         GameEntity gameEntity = gameDao.findRecentGame()
-                .orElseThrow(() -> new IllegalArgumentException("최근 게임 내역이 없습니다."));
+                .orElseThrow(() -> new IllegalStateException("최근 게임 내역이 없습니다."));
         chessGame.loadGame(gameEntity.getCurrentTurn(), boardDao.findByGameId(gameEntity.getId()));
     }
 
@@ -57,7 +57,7 @@ public class GameService {
             connection.commit();
         } catch (Exception e) {
             rollBack(connection);
-            throw new RuntimeException(e);
+            throw new DataAccessException(e);
         } finally {
             close(connection);
         }
@@ -71,7 +71,7 @@ public class GameService {
         try {
             connection.rollback();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e);
         }
     }
 
@@ -83,7 +83,7 @@ public class GameService {
         try {
             connection.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e);
         }
     }
 }

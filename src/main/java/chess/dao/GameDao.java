@@ -2,6 +2,7 @@ package chess.dao;
 
 import chess.domain.piece.Color;
 import chess.entity.GameEntity;
+import chess.exception.DataAccessException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -29,7 +30,7 @@ public class GameDao {
             }
             return OptionalInt.empty();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e);
         }
     }
 
@@ -44,7 +45,7 @@ public class GameDao {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e);
         }
     }
 
@@ -53,7 +54,7 @@ public class GameDao {
         try (final var statement = connection.prepareStatement(query)) {
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e);
         }
     }
 }
