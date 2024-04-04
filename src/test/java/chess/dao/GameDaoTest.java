@@ -49,7 +49,7 @@ public class GameDaoTest {
         gameDao.save(currentTurn);
 
         // then
-        assertThat(gameDao.findRecentGame().get().currentTurn())
+        assertThat(gameDao.findRecentGame().get().getCurrentTurn())
                 .isEqualTo(currentTurn);
     }
 
@@ -68,7 +68,7 @@ public class GameDaoTest {
         gameDao.save(currentTurn);
 
         // when & then
-        assertThat(gameDao.findRecentGame().get().currentTurn())
+        assertThat(gameDao.findRecentGame().get().getCurrentTurn())
                 .isEqualTo(currentTurn);
     }
 }

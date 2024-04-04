@@ -32,7 +32,7 @@ public class GameService {
         BoardDao boardDao = new BoardDao(connection);
         GameEntity gameEntity = gameDao.findRecentGame()
                 .orElseThrow(() -> new IllegalArgumentException("최근 게임 내역이 없습니다."));
-        chessGame.loadGame(gameEntity.currentTurn(), boardDao.findByGameId(gameEntity.id()));
+        chessGame.loadGame(gameEntity.getCurrentTurn(), boardDao.findByGameId(gameEntity.getId()));
     }
 
     public void deleteAllSave() {
