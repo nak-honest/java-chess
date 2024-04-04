@@ -19,11 +19,6 @@ CREATE TABLE IF NOT EXISTS board (
     FOREIGN KEY (game_id) REFERENCES game(id)
 );
 
-# 루트 계정 생성(권한 없는 루트 계정이 생성될 때 이를 해결)
-CREATE USER 'root'@'%' IDENTIFIED BY 'root';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
-flush privileges;
-
-# 외부에서 도커로 접속할 수 있도록 변경
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+# user에게 권한 부여
+GRANT ALL PRIVILEGES ON `chess`.* TO 'user'@'%';
 flush privileges;
