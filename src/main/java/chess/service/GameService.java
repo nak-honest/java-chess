@@ -5,6 +5,7 @@ import chess.dao.GameDao;
 import chess.db.JdbcConnection;
 import chess.domain.game.ChessGame;
 import chess.entity.GameEntity;
+import chess.exception.DataAccessException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,7 +20,8 @@ public class GameService {
     public void saveGame(ChessGame chessGame, Connection connection) {
         GameDao gameDao = new GameDao(connection);
         BoardDao boardDao = new BoardDao(connection);
-        int gameId = gameDao.save(chessGame.currentTurn());
+        int gameId = gameDao.save(chessGame.currentTurn())
+                .orElseThrow(() -> new DataAccessException("식별자를 제대로 받지 못했습니다."));
         boardDao.save(gameId, chessGame.getPieces());
     }
 

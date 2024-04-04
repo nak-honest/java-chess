@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 public class GameDao {
     private final Connection connection;
@@ -16,7 +17,7 @@ public class GameDao {
         this.connection = connection;
     }
 
-    public int save(Color currentTurn) {
+    public OptionalInt save(Color currentTurn) {
         final var query = "INSERT INTO game (game_turn) VALUES (?);";
         try (final var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, currentTurn.name());
@@ -24,9 +25,9 @@ public class GameDao {
             final ResultSet generatedKeys = statement.getGeneratedKeys();
 
             if (generatedKeys.next()) {
-                return generatedKeys.getInt(1);
+                return OptionalInt.of(generatedKeys.getInt(1));
             }
-            return 0;
+            return OptionalInt.empty();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -47,7 +47,7 @@ public class BoardDaoTest {
     @Test
     void saveEndStateTest() {
         // given
-        int gameId = gameDao.save(Color.WHITE);
+        int gameId = gameDao.save(Color.WHITE).getAsInt();
         ChessBoard chessBoard = PiecePositions.createBoard();
 
         // when
@@ -62,7 +62,7 @@ public class BoardDaoTest {
     @Test
     void findRecentTest() {
         // given
-        int gameId = gameDao.save(Color.WHITE);
+        int gameId = gameDao.save(Color.WHITE).getAsInt();
         ChessBoard chessBoard = PiecePositions.createBoard();
         boardDao.save(gameId, chessBoard.getPieces());
 
